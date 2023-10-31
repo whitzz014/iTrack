@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
        BorderPane root = new BorderPane();
 
-
+        //Mayo De Noche
         Scene scene = new Scene(root,ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
         stage.setTitle("iTrack");
         stage.setScene(scene);
