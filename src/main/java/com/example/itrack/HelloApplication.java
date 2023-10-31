@@ -1,5 +1,6 @@
 package com.example.itrack;
 
+import com.example.itrack.Constants.ScreenRatio;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ public class HelloApplication extends Application {
        BorderPane root = new BorderPane();
 
 
-        Scene scene = new Scene(root, 320, 240);
+        Scene scene = new Scene(root,ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
         stage.setTitle("iTrack");
         stage.setScene(scene);
         stage.show();
