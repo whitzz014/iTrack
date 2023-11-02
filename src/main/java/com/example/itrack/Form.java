@@ -1,3 +1,8 @@
+/**
+ * Name: iTrack
+ * created by: Brock Whitson and Ali Mehdi
+ * description: Macro Nutrient tracker that can be set to help you reach the users goals.
+ */
 package com.example.itrack;
 
 import com.example.itrack.Constants.ScreenRatio;
@@ -18,8 +23,6 @@ import java.io.IOException;
 
 public class Form extends Application {
 
-    // Hey abba
-    //Hello brock
     @Override
     public void start(Stage stage) throws IOException {
        BorderPane root = new BorderPane();
@@ -38,22 +41,33 @@ public class Form extends Application {
         root.setBottom(tabPane);
 
         //add menu bar
+        //File options
         MenuBar menu = new MenuBar();
         Menu fileMenu = new Menu("File");
-        Menu creditsMenu = new Menu("Credits");
+        //account option
+        MenuItem accountMenu = new MenuItem("Account");
+        //TODO-> sends to account info pane
+
+        //settings option
+        MenuItem settingsMenu = new MenuItem("Settings");
+        //TODO-> send to settings pane
+
         MenuItem exit = new MenuItem("Close Application");
         exit.setOnAction(e->{
             System.exit(0);
         });
 
         //credits
+        Menu creditsMenu = new Menu("Credits");
+        MenuItem ideUsed = new MenuItem("IDE: IntelliJ");
         MenuItem founderOne = new MenuItem("Ali Mehdi");
         MenuItem founderTwo = new MenuItem("Brock Whitson");
         //add credits to tab
-        creditsMenu.getItems().addAll(founderOne,founderTwo);
-
-        fileMenu.getItems().addAll(exit);
+        creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
+        fileMenu.getItems().addAll(accountMenu, settingsMenu, exit);
         menu.getMenus().addAll(fileMenu,creditsMenu);
+
+
         root.setTop(menu);
 
         //Mayo De Noche
