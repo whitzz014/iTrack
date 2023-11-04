@@ -1,7 +1,6 @@
 package com.example.itrack.database;
 
-import java.net.ConnectException;
-import java.nio.channels.ConnectionPendingException;
+import java.sql.*;
 
 public class Database {
     /**
@@ -10,7 +9,7 @@ public class Database {
 
     private static Database instance;
     //make Connection
-    
+    private Connection connection;
 
     private Database() {}
 
