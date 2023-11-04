@@ -27,11 +27,6 @@ public class MainApplication extends Application {
     public static  MenuBar menu = new MenuBar();
 
 
-    //create tabPane
-
-    //Create the tabs
-
-    //AddItemTab addItemTab = new AddItemTab();
 
     public static Stage mainStage;
 
@@ -78,7 +73,7 @@ public class MainApplication extends Application {
 
         //set tab pane to set to add item
 
-    //connect stage to mainstage
+    //connect stage to mainStage
       mainStage = stage;
       //so user cant adjust application size
       mainStage.setResizable(false);

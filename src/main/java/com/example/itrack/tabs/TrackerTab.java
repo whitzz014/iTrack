@@ -11,7 +11,6 @@ public class TrackerTab extends Tab {
 
 
     private TrackerTab(){
-
         this.setText("Tracker");
         GridPane root = new GridPane();
         this.setContent(root);
