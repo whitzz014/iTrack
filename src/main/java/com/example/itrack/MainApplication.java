@@ -7,6 +7,7 @@ package com.example.itrack;
 
 
 import com.example.itrack.Constants.ScreenRatio;
+import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SettingsScene;
 import com.example.itrack.tabs.TrackerTab;
@@ -40,7 +41,9 @@ public class MainApplication extends Application {
         //account option
         MenuItem accountMenu = new MenuItem("Account");
         //TODO-> sends to account info pane
-
+            accountMenu.setOnAction(e->{
+                MainApplication.mainStage.setScene(new AccountScene());
+            });
         //settings option
         MenuItem settingsMenu = new MenuItem("Settings");
         //send to settings pane
