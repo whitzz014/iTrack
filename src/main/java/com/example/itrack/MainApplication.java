@@ -6,19 +6,75 @@
 package com.example.itrack;
 
 
+import com.example.itrack.Constants.ScreenRatio;
 import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.SettingsScene;
+import com.example.itrack.tabs.TrackerTab;
 import javafx.application.Application;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MainApplication extends Application {
 
-    private static Stage mainStage;
+
+    //File options
+    public static  MenuBar menu = new MenuBar();
+
+
+    //create tabPane
+
+    //Create the tabs
+
+    //AddItemTab addItemTab = new AddItemTab();
+
+    public static Stage mainStage;
 
     @Override
     public void start(Stage stage) throws IOException {
+        Menu fileMenu = new Menu("File");
+        //account option
+        MenuItem accountMenu = new MenuItem("Account");
+        //TODO-> sends to account info pane
+
+        //settings option
+        MenuItem settingsMenu = new MenuItem("Settings");
+        //send to settings pane
+        settingsMenu.setOnAction(e->{
+            MainApplication.mainStage.setScene(new SettingsScene());
+        });
+        //exit app button
+        MenuItem exit = new MenuItem("Close Application");
+        exit.setOnAction(e->{
+            System.exit(0);
+        });
+
+        //Tracker Menu Item
+        Menu navMenu = new Menu("iNavigation");
+        MenuItem formItem = new MenuItem("Tracker");
+        formItem.setOnAction(e->{
+            MainApplication.mainStage.setScene(new FormScene());
+        });
+
+        navMenu.getItems().addAll(formItem);
+
+        //credits
+        Menu creditsMenu = new Menu("Credits");
+        MenuItem ideUsed = new MenuItem("IDE: IntelliJ");
+        MenuItem founderOne = new MenuItem("Ali Mehdi");
+        MenuItem founderTwo = new MenuItem("Brock Whitson");
+
+        creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
+        fileMenu.getItems().addAll(accountMenu, settingsMenu, exit);
+        menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
         //Mayo De Noche
+
+        //set tab pane to set to add item
+
     //connect stage to mainstage
       mainStage = stage;
       //so user cant adjust application size
@@ -29,7 +85,6 @@ public class MainApplication extends Application {
       mainStage.setScene(new FormScene());
       mainStage.show();
     }
-
     public static void main(String[] args) {
         launch();
     }
