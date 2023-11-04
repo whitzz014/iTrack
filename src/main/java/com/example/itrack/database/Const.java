@@ -1,2 +1,4 @@
-package com.example.itrack.database;public class Const {
+package com.example.itrack.database;
+
+public class Const  {
 }
