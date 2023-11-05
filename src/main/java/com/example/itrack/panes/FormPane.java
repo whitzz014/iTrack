@@ -1,23 +1,30 @@
 package com.example.itrack.panes;
-import com.example.itrack.tabs.TrackerTab;
-import javafx.scene.control.TabPane;
+
+import com.example.itrack.panes.CustomTabPane;
+import com.example.itrack.tabs.DailyTab;
+import com.example.itrack.tabs.WeeklyTab;
 import javafx.scene.layout.BorderPane;
 
-import static com.example.itrack.MainApplication.*;
+import static com.example.itrack.MainApplication.menu;
 
 public class FormPane extends BorderPane {
 
-    public FormPane(){
+    public FormPane() {
+        // Custom tab pane
+        CustomTabPane tabPane = new CustomTabPane();
 
-        //tab pane
-         TabPane tabPane = new TabPane();
-        //add tabs
-        TrackerTab addItemTab = TrackerTab.getInstance();//replaced with singleton form so we don't have to create new objected we commented out above
-        //AddItemTab addItemTab = new AddItemTab();
-        addItemTab.setClosable(false);
-        tabPane.getTabs().addAll(addItemTab);
+        // Add tabs
+        DailyTab dailyTab = DailyTab.getInstance();
+        WeeklyTab weeklyTab = WeeklyTab.getInstance();
+        dailyTab.setClosable(false);
+        weeklyTab.setClosable(false);
+
+        tabPane.getTabs().addAll(dailyTab, weeklyTab);
+
+        // Add the custom tab pane to the bottom of the form pane
         this.setBottom(tabPane);
-        //add menu
+
+        // Add menu
         this.setTop(menu);
     }
 }
