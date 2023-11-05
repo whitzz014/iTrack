@@ -26,8 +26,6 @@ public class MainApplication extends Application {
     //File options
     public static  MenuBar menu = new MenuBar();
 
-
-
     public static Stage mainStage;
 
     @Override

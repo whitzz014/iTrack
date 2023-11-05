@@ -36,6 +36,27 @@ public class DBConst {
                     PERSON_COLUMN_GOAL_WEIGHT + " INT NOT NULL " +
                     ")";
 
+    //meal info
+    public static final String TABLE_MEAL = "meals";
+    public static final String MEAL_COLUMN_ID = "id";
+    public static final String MEAL_COLUMN_CALORIES = "calories";
+    public static final String MEAL_COLUMN_NAME = "name";
+    public static final String MEAL_COLUMN_PROTEIN = "protein";
+    public static final String MEAL_COLUMN_FAT = "fat";
+    public static final String MEAL_COLUMN_CARBS = "carbs";
+
+    public static final String CREATE_TABLE_MEAL =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_MEAL + " (" +
+                    MEAL_COLUMN_ID + " INT AUTO_INCREMENT PRIMARY KEY, " +
+                    MEAL_COLUMN_NAME + " VARCHAR(255) NOT NULL, " +
+                    MEAL_COLUMN_CALORIES + " INT NOT NULL, " +
+                    MEAL_COLUMN_PROTEIN + " INT NOT NULL, " +
+                    MEAL_COLUMN_FAT + " INT NOT NULL, " +
+                    MEAL_COLUMN_CARBS + " INT NOT NULL" +
+                    ")";
+
+
+
 
 
 
