@@ -1,5 +1,6 @@
 package com.example.itrack.tabs;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,8 +22,12 @@ public class WeeklyTab extends Tab {
 //        ImageView imageView = new ImageView(image);
 //        root.getChildren().add(imageView);
         Text text = new Text();
+        Text text1 = new Text();
         text.setText("hello world");
-        root.add(text, 1, 1);
+        text1.setText("bye world");
+        root.setAlignment(Pos.CENTER);
+        root.add(text, 0, 0);
+        root.add(text1, 0, 1);
         this.setContent(root);
     }
 
