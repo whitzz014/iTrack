@@ -6,17 +6,18 @@
 package com.example.itrack;
 
 
+<<<<<<< HEAD
 import com.example.itrack.Constants.ScreenRatio;
 import com.example.itrack.database.Database;
+=======
+>>>>>>> development
 import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SettingsScene;
-import com.example.itrack.tabs.TrackerTab;
 import javafx.application.Application;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
