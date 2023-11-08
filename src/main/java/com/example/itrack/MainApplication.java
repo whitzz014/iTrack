@@ -7,6 +7,7 @@ package com.example.itrack;
 
 
 import com.example.itrack.Constants.ScreenRatio;
+import com.example.itrack.database.Database;
 import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SettingsScene;
@@ -69,7 +70,7 @@ public class MainApplication extends Application {
         menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
         //Mayo De Noche
 
-        //set tab pane to set to add item
+        Database.getInstance();
 
     //connect stage to mainStage
       mainStage = stage;
