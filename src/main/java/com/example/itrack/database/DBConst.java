@@ -22,6 +22,7 @@ public class DBConst {
     public static final String TABLE_PERSON_INFO = "person";
     public static final String PERSON_COLUMN_ID = "id";
     public static final String PERSON_COLUMN_AGE = "age";
+    public static final String PERSON_COLUMN_GENDER = "gender";
     public static final String PERSON_COLUMN_HEIGHT = "height";
     public static final String PERSON_COLUMN_WEIGHT = "weight";
     public static final String PERSON_COLUMN_GOAL_WEIGHT = "goalWeight";
@@ -30,9 +31,12 @@ public class DBConst {
             "CREATE TABLE IF NOT EXISTS " + TABLE_PERSON_INFO + " (" +
                     PERSON_COLUMN_ID + " INT AUTO_INCREMENT NOT NULL PRIMARY KEY, " +
                     PERSON_COLUMN_AGE + " INT NOT NULL, " +
+                    PERSON_COLUMN_GENDER + " VARCHAR(6) NOT NULL, " +
                     PERSON_COLUMN_HEIGHT + " INT NOT NULL, " +
                     PERSON_COLUMN_WEIGHT + " INT NOT NULL, " +
-                    PERSON_COLUMN_GOAL_WEIGHT + " INT NOT NULL " + ");";
+                    PERSON_COLUMN_GOAL_WEIGHT + " INT NOT NULL " + 
+                    PERSON_COLUMN_GOAL_WEIGHT + " INT NOT NULL" + ");";
+
 
     //meal info
     public static final String TABLE_MEAL = "meals";
