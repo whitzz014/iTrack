@@ -10,13 +10,12 @@ import com.example.itrack.Constants.ScreenRatio;
 import com.example.itrack.database.Database;
 import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.LoginScene;
 import com.example.itrack.scenes.SettingsScene;
-import com.example.itrack.tabs.TrackerTab;
 import javafx.application.Application;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,6 +31,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Menu fileMenu = new Menu("File");
+
         //account option
         MenuItem accountMenu = new MenuItem("Account");
         //TODO-> sends to account info pane
@@ -76,10 +76,9 @@ public class MainApplication extends Application {
       mainStage = stage;
       //so user cant adjust application size
       mainStage.setResizable(false);
-      //app title
-      mainStage.setTitle("iTrack");
+
       //connect FormScene so it is the main scene
-      mainStage.setScene(new FormScene());
+      mainStage.setScene(new LoginScene());
       mainStage.show();
     }
     public static void main(String[] args) {
