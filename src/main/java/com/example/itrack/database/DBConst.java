@@ -31,7 +31,7 @@ public class DBConst {
             "CREATE TABLE IF NOT EXISTS " + TABLE_PERSON_INFO + " (" +
                     PERSON_COLUMN_ID + " INT AUTO_INCREMENT NOT NULL PRIMARY KEY, " +
                     PERSON_COLUMN_AGE + " INT NOT NULL, " +
-                    PERSON_COLUMN_GENDER + "VARCHAR(6) NOT NULL, " +
+                    PERSON_COLUMN_GENDER + " VARCHAR(6) NOT NULL, " +
                     PERSON_COLUMN_HEIGHT + " INT NOT NULL, " +
                     PERSON_COLUMN_WEIGHT + " INT NOT NULL, " +
                     PERSON_COLUMN_GOAL_WEIGHT + " INT NOT NULL" + ");";

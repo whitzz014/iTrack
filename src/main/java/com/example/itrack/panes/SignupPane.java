@@ -5,6 +5,7 @@ import com.example.itrack.scenes.LoginScene;
 import com.example.itrack.scenes.SignupScene;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -26,16 +27,41 @@ public class SignupPane extends BorderPane {
         Text title = new Text("Sign Up");
         title.setFont(titleFont);
 
-        //Name
+        //USERNAME
+        Text usernameTitle = new Text("Username: ");
+        usernameTitle.setFont(textFont);
 
+        TextField username = new TextField();
+        username.setPromptText("Whitzz14");
+        username.setFont(textFont);
+
+        //HBox -- username
+        HBox usernameBox = new HBox();
+        usernameBox.setAlignment(Pos.CENTER);
+        usernameBox.getChildren().addAll(usernameTitle,username);
+
+        //PASSWORD
+        Text passTitle = new Text("Password: ");
+        passTitle.setFont(textFont);
+
+        TextField password = new TextField();
+        password.setPromptText("********");
+        password.setFont(textFont);
+
+        //HBox -- username
+        HBox passBox = new HBox();
+        passBox.setAlignment(Pos.CENTER);
+        passBox.getChildren().addAll(passTitle,password);
+
+        //Name
         Text nameTitle = new Text("Name: ");
         nameTitle.setFont(textFont);
 
         TextField name = new TextField();
-        name.setPromptText("Ali Mehdi");
+        name.setPromptText("Brock Whitson");
         name.setFont(textFont);
 
-        //Hbox for name
+        //HBox for name
         HBox nameBox = new HBox();
         nameBox.setAlignment(Pos.CENTER);
         nameBox.getChildren().addAll(nameTitle,name);
@@ -45,7 +71,7 @@ public class SignupPane extends BorderPane {
         ageTitle.setFont(textFont);
 
         TextField age = new TextField();
-        age.setPromptText("20");
+        age.setPromptText("21");
         age.setFont(textFont);
 
         //HBox for name
@@ -56,10 +82,8 @@ public class SignupPane extends BorderPane {
         //GENDER
         Text genderTitle = new Text("Gender: ");
         genderTitle.setFont(textFont);
-        TextField gender = new TextField();
-        gender.setPromptText("MALE/FEMALE");
-        gender.setFont(textFont);
-        String usersGender = gender.getText().toUpperCase();
+        ComboBox<String> gender = new ComboBox();
+        gender.getItems().addAll("Male", "Female");
 
         //HBox for name
         HBox genderBox = new HBox();
@@ -105,13 +129,14 @@ public class SignupPane extends BorderPane {
         //Button
         Button signupButton = new Button("Sign Up");
         signupButton.setOnAction(e->{
+            
             MainApplication.mainStage.setScene(new LoginScene());
         });
 
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
+        signUpBox.getChildren().addAll(title,usernameBox, passBox, nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
 
         this.setCenter(signUpBox);
     }
