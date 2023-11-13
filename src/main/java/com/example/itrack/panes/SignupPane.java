@@ -20,11 +20,13 @@ import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
 public class SignupPane extends BorderPane {
+
     public SignupPane() {
         this.setTop(menu);
         //Fonts
         Font textFont = Font.font("Trebuchet MS", 14);
         Font titleFont = Font.font("Trebuchet MS", 18);
+        Font errorFont = new Font("Times New Roman", 12);
 
         //Sign Up
         //Title
@@ -154,7 +156,10 @@ public class SignupPane extends BorderPane {
                 checkStatement.setString(1, username.getText());
                 ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next()){
-                System.out.println("Username already in use");
+                username.clear();
+                username.setPromptText(" Username already in use! ");
+                username.setStyle("-fx-prompt-text-fill: red;");
+                username.setFont(errorFont);
             }else{
                 String insertAccountQuery = "INSERT INTO " + DBConst.TABLE_ACCOUNT_INFO +
                         "(name, username, password) VALUES (?, ?, ?)";
