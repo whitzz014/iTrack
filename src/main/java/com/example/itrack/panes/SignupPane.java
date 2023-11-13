@@ -14,10 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
@@ -119,7 +116,7 @@ public class SignupPane extends BorderPane {
         Text weightTitle = new Text("Weight: ");
         weightTitle.setFont(textFont);
         TextField weight = new TextField();
-        weight.setPromptText("83kg");
+        weight.setPromptText("83");
         weight.setFont(textFont);
         Text weightMeasure = new Text("kg");
         weightMeasure.setFont(textFont);
@@ -135,51 +132,59 @@ public class SignupPane extends BorderPane {
         TextField goalWeight = new TextField();
         goalWeight.setPromptText("102");
         goalWeight.setFont(textFont);
-       // String userGoal = goalWeight.getText();
+        Text gWeightMeasure = new Text("kg");
+        gWeightMeasure.setFont(textFont);
+        // String userGoal = goalWeight.getText();
 
         //HBox for name
         HBox goalWeightBox = new HBox();
         goalWeightBox.setAlignment(Pos.CENTER);
-        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,weightMeasure);
+        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightMeasure);
 
         //Button
         Button signupButton = new Button("Sign Up");
         signupButton.setOnAction(e->{
-            String insertAccountQuery = "INSERT INTO " + DBConst.TABLE_ACCOUNT_INFO +
-                    "(name, username, password) VALUES (?, ?, ?)";
             try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
                             "?serverTimezone=UTC",
                     DB_USER,
                     DB_PASS);){
-               PreparedStatement preparedStatement = connection.prepareStatement(insertAccountQuery);
-                preparedStatement.setString(1, name.getText());
-                preparedStatement.setString(2,username.getText());
-                preparedStatement.setString(3,password.getText());
-               preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                String checkUsernameUnique = "SELECT username FROM " + DBConst.TABLE_ACCOUNT_INFO
+                        + " WHERE username = ?";
+                PreparedStatement checkStatement = connection.prepareStatement(checkUsernameUnique);
+                checkStatement.setString(1, username.getText());
+                ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next()){
+                System.out.println("Username already in use");
+            }else{
+                String insertAccountQuery = "INSERT INTO " + DBConst.TABLE_ACCOUNT_INFO +
+                        "(name, username, password) VALUES (?, ?, ?)";
+
+                    PreparedStatement preparedStatement = connection.prepareStatement(insertAccountQuery);
+                    preparedStatement.setString(1, name.getText());
+                    preparedStatement.setString(2,username.getText());
+                    preparedStatement.setString(3,password.getText());
+                    preparedStatement.executeUpdate();
+
+                String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
+                        "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
+
+
+                    PreparedStatement preparedStatement1 = connection.prepareStatement(insertPersonQuery);
+
+                    preparedStatement1.setString(1, name.getText());
+                    preparedStatement1.setInt(2, Integer.parseInt(age.getText()));
+                    preparedStatement1.setString(3, gender.getValue());
+                    preparedStatement1.setInt(4, Integer.parseInt(height.getText()));
+                    preparedStatement1.setInt(5, Integer.parseInt(weight.getText()));
+                    preparedStatement1.setInt(6, Integer.parseInt(goalWeight.getText()));
+
+                    preparedStatement1.executeUpdate();
+
+                MainApplication.mainStage.setScene(new LoginScene());
             }
-
-            String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
-                    "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
-                            "?serverTimezone=UTC",
-                    DB_USER,
-                    DB_PASS);){
-                PreparedStatement preparedStatement = connection.prepareStatement(insertPersonQuery);
-
-                preparedStatement.setString(1, name.getText());
-                preparedStatement.setInt(2, Integer.parseInt(age.getText()));
-                preparedStatement.setString(3, gender.getValue());
-                preparedStatement.setInt(4, Integer.parseInt(height.getText()));
-                preparedStatement.setInt(5, Integer.parseInt(weight.getText()));
-                preparedStatement.setInt(6, Integer.parseInt(goalWeight.getText()));
-
-                preparedStatement.executeUpdate();
             }catch (SQLException ev){
                 ev.printStackTrace();
             }
-            MainApplication.mainStage.setScene(new LoginScene());
         });
 
         //VBox for info
