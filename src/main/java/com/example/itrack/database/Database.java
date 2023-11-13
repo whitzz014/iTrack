@@ -49,7 +49,7 @@ public class Database {
         Statement createTable;
         DatabaseMetaData it = connection.getMetaData();
 
-        ResultSet resultSet = it.getTables("bwhitsonit", null, tableName, null);
+        ResultSet resultSet = it.getTables("bwhitsonprojects", null, tableName, null);
 
         if(resultSet.next()){
             System.out.println(tableName + "table already exists");

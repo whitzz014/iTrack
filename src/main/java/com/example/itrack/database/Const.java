@@ -9,7 +9,7 @@ public class Const {
 
     //Queries
 
-//    INSERT INTO food (name, calories, protein, fat, carbs) VALUES ('Chicken Breast', 165, 31, 3, 0);
+//   INSERT INTO food (name, calories, protein, fat, carbs) VALUES ('Chicken Breast', 165, 31, 3, 0);
 //
 //    INSERT INTO food (name, calories, protein, fat, carbs) VALUES ('Chicken Thighs', 209, 26, 12, 0);
 //
