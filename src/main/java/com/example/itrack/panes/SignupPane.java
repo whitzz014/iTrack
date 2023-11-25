@@ -2,8 +2,7 @@ package com.example.itrack.panes;
 
 import com.example.itrack.MainApplication;
 import com.example.itrack.database.DBConst;
-import com.example.itrack.scenes.LoginScene;
-import com.example.itrack.scenes.SignupScene;
+import com.example.itrack.scenes.FormScene;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -144,38 +143,15 @@ public class SignupPane extends BorderPane {
         goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightMeasure);
 
         //Button
-        Button signupButton = new Button("Sign Up");
+        Button signupButton = new Button("Enter");
         signupButton.setOnAction(e->{
             try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
                             "?serverTimezone=UTC",
                     DB_USER,
                     DB_PASS);){
-                String checkUsernameUnique = "SELECT username FROM " + DBConst.TABLE_ACCOUNT_INFO
-                        + " WHERE username = ?";
-                PreparedStatement checkStatement = connection.prepareStatement(checkUsernameUnique);
-                checkStatement.setString(1, username.getText());
-                ResultSet resultSet = checkStatement.executeQuery();
-            if (resultSet.next()){
-                username.clear();
-                username.setPromptText(" Username already in use! ");
-                username.setStyle("-fx-prompt-text-fill: red;");
-                username.setFont(errorFont);
-            }else{
-                String insertAccountQuery = "INSERT INTO " + DBConst.TABLE_ACCOUNT_INFO +
-                        "(name, username, password) VALUES (?, ?, ?)";
-
-                    PreparedStatement preparedStatement = connection.prepareStatement(insertAccountQuery);
-                    preparedStatement.setString(1, name.getText());
-                    preparedStatement.setString(2,username.getText());
-                    preparedStatement.setString(3,password.getText());
-                    preparedStatement.executeUpdate();
-
                 String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
                         "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
-
-
                     PreparedStatement preparedStatement1 = connection.prepareStatement(insertPersonQuery);
-
                     preparedStatement1.setString(1, name.getText());
                     preparedStatement1.setInt(2, Integer.parseInt(age.getText()));
                     preparedStatement1.setString(3, gender.getValue());
@@ -184,9 +160,8 @@ public class SignupPane extends BorderPane {
                     preparedStatement1.setInt(6, Integer.parseInt(goalWeight.getText()));
 
                     preparedStatement1.executeUpdate();
+                MainApplication.mainStage.setScene(new FormScene());
 
-                MainApplication.mainStage.setScene(new LoginScene());
-            }
             }catch (SQLException ev){
                 ev.printStackTrace();
             }

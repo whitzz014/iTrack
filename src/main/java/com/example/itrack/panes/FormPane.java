@@ -1,14 +1,23 @@
 package com.example.itrack.panes;
 
 import com.example.itrack.Pojo.Food;
+import com.example.itrack.Pojo.PersonInfo;
+import com.example.itrack.Tables.PersonTable;
 import com.example.itrack.tabs.TrackerTab;
-import com.example.itrack.FoodTable;
+import com.example.itrack.Tables.FoodTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+
+import java.util.ArrayList;
 
 import static com.example.itrack.MainApplication.menu;
 
@@ -19,13 +28,35 @@ public class FormPane extends BorderPane {
     private TextField proteinTextField;
     private TextField fatTextField;
     private TextField carbsTextField;
+    private Text nameText;
+    private Text ageText;
+    private Text genderText;
+    private Text heightText;
+    private Text weightText;
+    private Text goalWeightText;
+
+
 
     public FormPane() {
         // Create a GridPane for food tracking
         GridPane gridPane = createGridPane();
 
         // Add the GridPane to the center of the BorderPane
-        this.setCenter(gridPane);
+        //testing out tabs
+
+        TabPane tabPane = new TabPane();
+
+       VBox navOrder = new VBox();
+       navOrder.getChildren().addAll(menu, tabPane);
+
+//
+//        // Create tabs and add them to the TabPane
+       TrackerTab addItemTab = TrackerTab.getInstance();
+        addItemTab.setClosable(false);
+        addItemTab.setContent(gridPane);
+//        Tab anotherTab = new Tab("Another Tab");
+
+        //Fill Tracker Tab with info
 
         // Populate foodComboBox with data from the FoodTable
         FoodTable foodTable = new FoodTable();
@@ -44,14 +75,35 @@ public class FormPane extends BorderPane {
             }
         });
 
+        //Create Person Info
+        BorderPane personPane = new BorderPane();
+        PersonTable personTable = new PersonTable();
+        Tab personTab = new Tab("Personal Info");
+        ArrayList<PersonInfo> persons = personTable.getAllPersonInfo();
+        for (PersonInfo person : persons) {
+            Text nameText = new Text("Name: " + person.getName());
+            Text ageText = new Text("Age: " + person.getAge());
+            Text genderText = new Text("Gender: " + person.getGender());
+            Text heightText = new Text("Height: " + person.getHeight());
+            Text weightText = new Text("Weight: " + person.getWeight());
+            Text goalWeightText = new Text("Goal Weight: " + person.getGoalWeight());
+
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(nameText,ageText,genderText,heightText,weightText,goalWeightText);
+            personPane.setCenter(vbox);
+            personTab.setContent(personPane);
+            personTab.setClosable(false);
+       }
+
+
         // Create a TabPane
-        TabPane tabPane = createTabPane();
+        tabPane.getTabs().addAll(personTab, addItemTab);
 
         // Add the TabPane to the bottom of the BorderPane
-        this.setBottom(tabPane);
+
 
         // Add menu
-        this.setTop(menu);
+        this.setTop(navOrder);
     }
 
     private GridPane createGridPane() {
@@ -93,19 +145,18 @@ public class FormPane extends BorderPane {
         return gridPane;
     }
 
-    private TabPane createTabPane() {
-        TabPane tabPane = new TabPane();
-
-        // Create tabs and add them to the TabPane
-        TrackerTab addItemTab = TrackerTab.getInstance();
-        addItemTab.setClosable(false);
-
-        Tab anotherTab = new Tab("Another Tab");
-        // Add content to the additional tabs as needed
-
-        tabPane.getTabs().addAll(addItemTab, anotherTab);
-
-        return tabPane;
-    }
+//    private TabPane createTabPane() {
+//        TabPane tabPane = new TabPane();
+//
+//        // Create tabs and add them to the TabPane
+//        TrackerTab addItemTab = TrackerTab.getInstance();
+//        addItemTab.setClosable(false);
+//
+//        Tab anotherTab = new Tab("Another Tab");
+//        // Add content to the additional tabs as needed
+//        tabPane.getTabs().addAll(addItemTab, anotherTab);
+//
+//        return tabPane;
+//    }
     //hello
 }

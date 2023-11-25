@@ -26,7 +26,6 @@ public class Database {
                             DB_PASS);
             System.out.println("Created Connection!");
 
-            createTables(DBConst.TABLE_ACCOUNT_INFO, DBConst.CREATE_TABLE_ACCOUNT_INFO, connection);
             createTables(DBConst.TABLE_PERSON_INFO, DBConst.CREATE_TABLE_PERSON_INFO, connection);
             createTables(DBConst.TABLE_MEAL, DBConst.CREATE_TABLE_MEAL, connection);
             createTables(DBConst.TABLE_FOOD, DBConst.CREATE_TABLE_FOOD, connection);

@@ -1,4 +1,4 @@
-package com.example.itrack;
+package com.example.itrack.Tables;
 
 import com.example.itrack.database.DBConst;
 import com.example.itrack.database.Database;

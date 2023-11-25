@@ -6,12 +6,11 @@
 package com.example.itrack;
 
 
-import com.example.itrack.Constants.ScreenRatio;
 import com.example.itrack.database.Database;
 import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
-import com.example.itrack.scenes.LoginScene;
 import com.example.itrack.scenes.SettingsScene;
+import com.example.itrack.scenes.SignupScene;
 import javafx.application.Application;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -78,7 +77,7 @@ public class MainApplication extends Application {
       mainStage.setResizable(false);
 
       //connect FormScene so it is the main scene
-      mainStage.setScene(new LoginScene());
+      mainStage.setScene(new SignupScene());
       mainStage.show();
     }
     public static void main(String[] args) {

@@ -2,22 +2,6 @@ package com.example.itrack.database;
 
 public class DBConst {
 
-    //account info
-    public static final String TABLE_ACCOUNT_INFO = "account";
-    public static final String ACCOUNT_COLUMN_ID = "id";
-    public static final String ACCOUNT_COLUMN_NAME = "name";
-    public static final String ACCOUNT_COLUMN_USERNAME = "username";
-    public static final String ACCOUNT_COLUMN_PASS = "password";
-
-    public static final String CREATE_TABLE_ACCOUNT_INFO =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_ACCOUNT_INFO + " (" +
-                    ACCOUNT_COLUMN_ID + " INT AUTO_INCREMENT NOT NULL PRIMARY KEY, " +
-                    ACCOUNT_COLUMN_NAME + " VARCHAR(50) NOT NULL, " +
-                    ACCOUNT_COLUMN_USERNAME + " VARCHAR(255) NOT NULL, " +
-                    ACCOUNT_COLUMN_PASS + " VARCHAR(50) NOT NULL" + ");";
-
-
-
     //person info
     public static final String TABLE_PERSON_INFO = "person";
     public static final String PERSON_COLUMN_ID = "id";
