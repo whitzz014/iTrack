@@ -3,6 +3,7 @@ package com.example.itrack.panes;
 import com.example.itrack.Pojo.Food;
 import com.example.itrack.Pojo.PersonInfo;
 import com.example.itrack.Tables.PersonTable;
+import com.example.itrack.database.DBConst;
 import com.example.itrack.tabs.TrackerTab;
 import com.example.itrack.Tables.FoodTable;
 import javafx.collections.FXCollections;
@@ -17,9 +18,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.example.itrack.MainApplication.menu;
+import static com.example.itrack.database.Const.*;
 
 public class FormPane extends BorderPane {
 
@@ -37,20 +43,20 @@ public class FormPane extends BorderPane {
 
 
 
+
     public FormPane() {
         // Create a GridPane for food tracking
         GridPane gridPane = createGridPane();
 
         // Add the GridPane to the center of the BorderPane
         //testing out tabs
-
-        TabPane tabPane = new TabPane();
+    TabPane tabPane = new TabPane();
 
        VBox navOrder = new VBox();
        navOrder.getChildren().addAll(menu, tabPane);
 
-//
-//        // Create tabs and add them to the TabPane
+
+       // Create tabs and add them to the TabPane
        TrackerTab addItemTab = TrackerTab.getInstance();
         addItemTab.setClosable(false);
         addItemTab.setContent(gridPane);
@@ -95,9 +101,13 @@ public class FormPane extends BorderPane {
             personTab.setClosable(false);
        }
 
+        // Weekly tab
+        Tab weeklyTab = new Tab("Weekly Report");
+
+
 
         // Create a TabPane
-        tabPane.getTabs().addAll(personTab, addItemTab);
+        tabPane.getTabs().addAll(personTab, addItemTab, weeklyTab);
 
         // Add the TabPane to the bottom of the BorderPane
 
@@ -128,7 +138,35 @@ public class FormPane extends BorderPane {
 
         // Create a button for adding the food to the database
         Button addButton = new Button("Add Food");
+        addButton.setOnAction(e->{
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
+                                "?serverTimezone=UTC",
+                        DB_USER,
+                        DB_PASS);){
+                String insertQuery = "INSERT INTO " + DBConst.TABLE_MEAL + " (" +
+                        DBConst.MEAL_COLUMN_NAME + ", " +
+                        DBConst.MEAL_COLUMN_CALORIES + ", " +
+                        DBConst.MEAL_COLUMN_PROTEIN + ", " +
+                        DBConst.MEAL_COLUMN_FAT + ", " +
+                        DBConst.MEAL_COLUMN_CARBS + ", " +
+                        DBConst. MEAL_COLUMN_TIMESTAMP +
+                        ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
+                try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                    // Set values for the parameters
+                    String selectedMeal = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem());
+//                    preparedStatement.setString(1, );
+//                    preparedStatement.setInt(2, valueForCalories);
+//                    preparedStatement.setInt(3, valueForProtein);
+//                    preparedStatement.setInt(4, valueForFat);
+//                    preparedStatement.setInt(5, valueForCarbs);
+
+                    // Execute the query
+                    preparedStatement.executeUpdate();
+                } catch (SQLException ev){
+            ev.printStackTrace();
+        }
+            });
         // Add components to the GridPane
         gridPane.add(foodLabel, 0, 0);
         gridPane.add(foodComboBox, 1, 0);
