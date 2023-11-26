@@ -6,7 +6,13 @@
 package com.example.itrack;
 
 
+<<<<<<< HEAD
+=======
+
+import com.example.itrack.Constants.ScreenRatio;
+>>>>>>> development
 import com.example.itrack.database.Database;
+
 import com.example.itrack.scenes.AccountScene;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SettingsScene;

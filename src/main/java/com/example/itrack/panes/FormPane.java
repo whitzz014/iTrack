@@ -1,6 +1,16 @@
 package com.example.itrack.panes;
 
+<<<<<<< HEAD
 import com.example.itrack.MainApplication;
+=======
+import com.example.itrack.panes.CustomTabPane;
+import com.example.itrack.tabs.DailyTab;
+import com.example.itrack.tabs.WeeklyTab;
+import javafx.scene.layout.BorderPane;
+
+
+
+>>>>>>> development
 import com.example.itrack.Pojo.Food;
 import com.example.itrack.Pojo.PersonInfo;
 import com.example.itrack.Tables.PersonTable;
@@ -33,6 +43,20 @@ import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
 public class FormPane extends BorderPane {
+
+
+    public FormPane() {
+        // Custom tab pane
+        CustomTabPane tabPane = new CustomTabPane();
+
+        // Add tabs
+        DailyTab dailyTab = DailyTab.getInstance();
+        WeeklyTab weeklyTab = WeeklyTab.getInstance();
+        dailyTab.setClosable(false);
+        weeklyTab.setClosable(false);
+
+        tabPane.getTabs().addAll(dailyTab, weeklyTab);
+
 
     private ComboBox<Food> foodComboBox;
     private TextField caloriesTextField;
@@ -297,6 +321,10 @@ public class FormPane extends BorderPane {
 
         // Add the TabPane to the bottom of the BorderPane
 
+<<<<<<< HEAD
+=======
+        this.setBottom(tabPane);
+>>>>>>> development
 
         // Add menu
         this.setTop(navOrder);
@@ -385,4 +413,9 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
+<<<<<<< HEAD
     }
+=======
+}
+}
+>>>>>>> development
