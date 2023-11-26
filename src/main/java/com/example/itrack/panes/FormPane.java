@@ -1,16 +1,6 @@
 package com.example.itrack.panes;
 
-<<<<<<< HEAD
 import com.example.itrack.MainApplication;
-=======
-import com.example.itrack.panes.CustomTabPane;
-import com.example.itrack.tabs.DailyTab;
-import com.example.itrack.tabs.WeeklyTab;
-import javafx.scene.layout.BorderPane;
-
-
-
->>>>>>> development
 import com.example.itrack.Pojo.Food;
 import com.example.itrack.Pojo.PersonInfo;
 import com.example.itrack.Tables.PersonTable;
@@ -43,20 +33,6 @@ import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
 public class FormPane extends BorderPane {
-
-
-    public FormPane() {
-        // Custom tab pane
-        CustomTabPane tabPane = new CustomTabPane();
-
-        // Add tabs
-        DailyTab dailyTab = DailyTab.getInstance();
-        WeeklyTab weeklyTab = WeeklyTab.getInstance();
-        dailyTab.setClosable(false);
-        weeklyTab.setClosable(false);
-
-        tabPane.getTabs().addAll(dailyTab, weeklyTab);
-
 
     private ComboBox<Food> foodComboBox;
     private TextField caloriesTextField;
@@ -291,7 +267,7 @@ public class FormPane extends BorderPane {
 
         //Create Person Info
         BorderPane personPane = new BorderPane();
-//        PersonTable personTable = new PersonTable();
+        PersonTable personTable = new PersonTable();
 //        Tab personTab = new Tab("Personal Info");
 //        ArrayList<PersonInfo> persons = personTable.getAllPersonInfo();
 //        for (PersonInfo person : persons) {
@@ -302,14 +278,14 @@ public class FormPane extends BorderPane {
 //            Text weightText = new Text("Weight: " + person.getWeight());
 //            Text goalWeightText = new Text("Goal Weight: " + person.getGoalWeight());
 
-        
+
 
             VBox vbox = new VBox();
             vbox.getChildren().addAll(nameText,ageText,genderText,heightText,weightText,goalWeightText);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
-       }
+
 
         // Weekly tab
         Tab weeklyTab = new Tab("Weekly Report");
@@ -321,10 +297,6 @@ public class FormPane extends BorderPane {
 
         // Add the TabPane to the bottom of the BorderPane
 
-<<<<<<< HEAD
-=======
-        this.setBottom(tabPane);
->>>>>>> development
 
         // Add menu
         this.setTop(navOrder);
@@ -413,9 +385,4 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
-<<<<<<< HEAD
     }
-=======
-}
-}
->>>>>>> development
