@@ -149,11 +149,11 @@ public class SignupPane extends BorderPane {
             try {
                 PrintWriter signup = new PrintWriter("person_info.txt");
                 signup.println(name.getText());
-                signup.println(Integer.parseInt(age.getText()));
+                signup.println(age.getText() + " years old");
                 signup.println(gender.getValue());
-                signup.println(Integer.parseInt(height.getText()));
-                signup.println(Integer.parseInt(height.getText()));
-                signup.println(Integer.parseInt(goalWeight.getText()));
+                signup.println(height.getText() + "cm");
+                signup.println(weight.getText() + "kg");
+                signup.println(goalWeight.getText() + "kg");
                 signup.close();
             } catch (IOException ex) {
                 System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());

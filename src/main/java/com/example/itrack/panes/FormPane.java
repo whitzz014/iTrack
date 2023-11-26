@@ -190,11 +190,11 @@ public class FormPane extends BorderPane {
             try {
                 PrintWriter signup = new PrintWriter("person_info.txt");
                 signup.println(name.getText());
-                signup.println(Integer.parseInt(age.getText()));
+                signup.println(age.getText());
                 signup.println(gender.getValue());
-                signup.println(Integer.parseInt(height.getText()));
-                signup.println(Integer.parseInt(height.getText()));
-                signup.println(Integer.parseInt(goalWeight.getText()));
+                signup.println(height.getText());
+                signup.println(weight.getText());
+                signup.println(goalWeight.getText());
                 signup.close();
             } catch (IOException ex) {
                 System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
@@ -267,8 +267,8 @@ public class FormPane extends BorderPane {
 
         //Create Person Info
         BorderPane personPane = new BorderPane();
-        PersonTable personTable = new PersonTable();
-//        Tab personTab = new Tab("Personal Info");
+        //PersonTable personTable = new PersonTable();
+        Tab personTab = new Tab("Personal Info");
 //        ArrayList<PersonInfo> persons = personTable.getAllPersonInfo();
 //        for (PersonInfo person : persons) {
 //            Text nameText = new Text("Name: " + person.getName());
@@ -278,10 +278,18 @@ public class FormPane extends BorderPane {
 //            Text weightText = new Text("Weight: " + person.getWeight());
 //            Text goalWeightText = new Text("Goal Weight: " + person.getGoalWeight());
 
+        //display info on personTab
+        String[] info = readPersonInfo();
+        Label nameLabel = new Label( info[0]);
+        Label ageLabel = new Label(info[1]);
+        Label genderLabel = new Label(info[2]);
+        Label heightLabel = new Label(info[3]);
+        Label weightLabel = new Label(info[4]);
+        Label goalWeightLabel = new Label(info[5]);
 
 
             VBox vbox = new VBox();
-            vbox.getChildren().addAll(nameText,ageText,genderText,heightText,weightText,goalWeightText);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
@@ -369,6 +377,21 @@ public class FormPane extends BorderPane {
         gridPane.add(addButton, 1, 5);
 
         return gridPane;
+    }
+
+    private String[] readPersonInfo(){
+        String[] info = new String[6];
+        try (BufferedReader br = new BufferedReader(new FileReader("person_info.txt"))) {
+            info[0] = "Name: " + br.readLine().trim();
+            info[1] = "Age: " + br.readLine().trim();
+            info[2] = "Gender: " + br.readLine().trim();
+            info[3] = "Height: " + br.readLine().trim();
+            info[4] = "Weight: " + br.readLine().trim();
+            info[5] = "Goal Weight: " + br.readLine().trim();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return info;
     }
 
 //    private TabPane createTabPane() {
