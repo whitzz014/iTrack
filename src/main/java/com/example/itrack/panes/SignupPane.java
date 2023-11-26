@@ -13,6 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 
 import static com.example.itrack.MainApplication.menu;
@@ -32,32 +35,6 @@ public class SignupPane extends BorderPane {
         Text title = new Text("Sign Up");
         title.setFont(titleFont);
 
-        //USERNAME
-        Text usernameTitle = new Text("Username: ");
-        usernameTitle.setFont(textFont);
-
-        TextField username = new TextField();
-        username.setPromptText("Whitzz14");
-        username.setFont(textFont);
-       // String userName = username.getText();
-
-        //HBox -- username
-        HBox usernameBox = new HBox();
-        usernameBox.setAlignment(Pos.CENTER);
-        usernameBox.getChildren().addAll(usernameTitle,username);
-
-        //PASSWORD
-        Text passTitle = new Text("Password: ");
-        passTitle.setFont(textFont);
-
-        TextField password = new TextField();
-        password.setPromptText("********");
-        password.setFont(textFont);
-       // String passWord = password.getText();
-        //HBox -- username
-        HBox passBox = new HBox();
-        passBox.setAlignment(Pos.CENTER);
-        passBox.getChildren().addAll(passTitle,password);
 
         //Name
         Text nameTitle = new Text("Name: ");
@@ -144,33 +121,50 @@ public class SignupPane extends BorderPane {
 
         //Button
         Button signupButton = new Button("Enter");
-        signupButton.setOnAction(e->{
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
-                            "?serverTimezone=UTC",
-                    DB_USER,
-                    DB_PASS);){
-                String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
-                        "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
-                    PreparedStatement preparedStatement1 = connection.prepareStatement(insertPersonQuery);
-                    preparedStatement1.setString(1, name.getText());
-                    preparedStatement1.setInt(2, Integer.parseInt(age.getText()));
-                    preparedStatement1.setString(3, gender.getValue());
-                    preparedStatement1.setInt(4, Integer.parseInt(height.getText()));
-                    preparedStatement1.setInt(5, Integer.parseInt(weight.getText()));
-                    preparedStatement1.setInt(6, Integer.parseInt(goalWeight.getText()));
+//        signupButton.setOnAction(e->{
+//            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
+//                            "?serverTimezone=UTC",
+//                    DB_USER,
+//                    DB_PASS);){
+//                String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
+//                        "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
+//                    PreparedStatement preparedStatement1 = connection.prepareStatement(insertPersonQuery);
+//                    preparedStatement1.setString(1, name.getText());
+//                    preparedStatement1.setInt(2, Integer.parseInt(age.getText()));
+//                    preparedStatement1.setString(3, gender.getValue());
+//                    preparedStatement1.setInt(4, Integer.parseInt(height.getText()));
+//                    preparedStatement1.setInt(5, Integer.parseInt(weight.getText()));
+//                    preparedStatement1.setInt(6, Integer.parseInt(goalWeight.getText()));
+//
+//                    preparedStatement1.executeUpdate();
+//                MainApplication.mainStage.setScene(new FormScene());
+//
+//            }catch (SQLException ev){
+//                ev.printStackTrace();
+//            }
+//        });
+        File file = new File("person_info.txt");
 
-                    preparedStatement1.executeUpdate();
-                MainApplication.mainStage.setScene(new FormScene());
-
-            }catch (SQLException ev){
-                ev.printStackTrace();
+        signupButton.setOnAction(e-> {
+            try {
+                PrintWriter signup = new PrintWriter("person_info.txt");
+                signup.println(name.getText());
+                signup.println(Integer.parseInt(age.getText()));
+                signup.println(gender.getValue());
+                signup.println(Integer.parseInt(height.getText()));
+                signup.println(Integer.parseInt(height.getText()));
+                signup.println(Integer.parseInt(goalWeight.getText()));
+                signup.close();
+            } catch (IOException ex) {
+                System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
             }
+
         });
 
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,usernameBox, passBox, nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
+        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
 
         this.setCenter(signUpBox);
     }
