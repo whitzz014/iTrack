@@ -6,6 +6,7 @@ import com.example.itrack.Pojo.PersonInfo;
 import com.example.itrack.Tables.PersonTable;
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.SignupScene;
 import com.example.itrack.tabs.TrackerTab;
 import com.example.itrack.Tables.FoodTable;
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
@@ -29,6 +31,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static com.example.itrack.MainApplication.main;
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
@@ -39,14 +42,8 @@ public class FormPane extends BorderPane {
     private TextField proteinTextField;
     private TextField fatTextField;
     private TextField carbsTextField;
-    private Text nameText;
-    private Text ageText;
-    private Text genderText;
-    private Text heightText;
-    private Text weightText;
-    private Text goalWeightText;
-    private File file;
-
+    private Text error;
+    private double bmiCalculator;
 
 
 
@@ -73,33 +70,6 @@ public class FormPane extends BorderPane {
         //Title
         Text title = new Text("Sign Up");
         title.setFont(titleFont);
-
-        //USERNAME
-        Text usernameTitle = new Text("Username: ");
-        usernameTitle.setFont(textFont);
-
-        TextField username = new TextField();
-        username.setPromptText("Whitzz14");
-        username.setFont(textFont);
-        // String userName = username.getText();
-
-        //HBox -- username
-        HBox usernameBox = new HBox();
-        usernameBox.setAlignment(Pos.CENTER);
-        usernameBox.getChildren().addAll(usernameTitle,username);
-
-        //PASSWORD
-        Text passTitle = new Text("Password: ");
-        passTitle.setFont(textFont);
-
-        TextField password = new TextField();
-        password.setPromptText("********");
-        password.setFont(textFont);
-        // String passWord = password.getText();
-        //HBox -- username
-        HBox passBox = new HBox();
-        passBox.setAlignment(Pos.CENTER);
-        passBox.getChildren().addAll(passTitle,password);
 
         //Name
         Text nameTitle = new Text("Name: ");
@@ -204,7 +174,7 @@ public class FormPane extends BorderPane {
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,usernameBox, passBox, nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
+        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
 
 
 
@@ -223,10 +193,6 @@ public class FormPane extends BorderPane {
 //        }else{
 //           System.out.println("FILE DOESNT EXIST!");
 //       }
-
-
-
-
 
 
         // Create a GridPane for food tracking
@@ -269,31 +235,81 @@ public class FormPane extends BorderPane {
         BorderPane personPane = new BorderPane();
         //PersonTable personTable = new PersonTable();
         Tab personTab = new Tab("Personal Info");
-//        ArrayList<PersonInfo> persons = personTable.getAllPersonInfo();
-//        for (PersonInfo person : persons) {
-//            Text nameText = new Text("Name: " + person.getName());
-//            Text ageText = new Text("Age: " + person.getAge());
-//            Text genderText = new Text("Gender: " + person.getGender());
-//            Text heightText = new Text("Height: " + person.getHeight());
-//            Text weightText = new Text("Weight: " + person.getWeight());
-//            Text goalWeightText = new Text("Goal Weight: " + person.getGoalWeight());
 
-        //display info on personTab
         String[] info = readPersonInfo();
-        Label nameLabel = new Label( info[0]);
-        Label ageLabel = new Label(info[1]);
-        Label genderLabel = new Label(info[2]);
-        Label heightLabel = new Label(info[3]);
-        Label weightLabel = new Label(info[4]);
-        Label goalWeightLabel = new Label(info[5]);
+        Text nameLabel = new Text("Name: " + info[0]);
+        Text ageLabel = new Text("Age: " + info[1]);
+        Text genderLabel = new Text("Gender: " + info[2]);
+        Text heightLabel = new Text("Height: " + info[3]);
+        Text weightLabel = new Text("Weight: " + info[4]);
+        Text goalWeightLabel = new Text("Goal Weight: " + info[5]);
 
+        //Create BMI Math
+        int personHeight = Integer.parseInt(info[3]);
+        int personWeight = Integer.parseInt(info[4]);
+        int personAge = Integer.parseInt(info[1]);
+         bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
+         String fitLevel = "";
+         String formatBMI = String.format("%.2f", bmiCalculator);
+        Text bmiLabel = new Text();
+
+        if (bmiCalculator <= 18.5){
+            fitLevel = "Underweight";
+        } else if (bmiCalculator >= 25 && bmiCalculator <= 29.9) {
+            fitLevel = "Overweight";
+        }else if ((bmiCalculator >= 30)){
+            if (bmiCalculator < 34.9){
+                fitLevel = "Class I (Moderate) Obesity";
+            } else if (bmiCalculator >= 35 && bmiCalculator < 40) {
+                fitLevel = "Class II (Severe) Obesity";
+            } else if (bmiCalculator >= 40) {
+                fitLevel = "Class III (Very Severe or Morbid) Obesity";
+            }
+        }else{
+            fitLevel = "Normal Weight";
+        }
+
+        bmiLabel = new Text("BMI: " + formatBMI + " : " + fitLevel);
+
+        if (bmiCalculator <= 18.5){
+            bmiLabel.setFill(Color.ORANGERED);
+        } else if (bmiCalculator >= 25 && bmiCalculator <= 29.9) {
+            bmiLabel.setFill(Color.RED);
+        }else if ((bmiCalculator >= 30)){
+            bmiLabel.setFill(Color.DARKRED);
+        }else{
+            bmiLabel.setFill(Color.GREEN);
+        }
+
+        Button deleteButton = new Button("DELETE");
+
+        Button updateButton = new Button("UPDATE");
+        updateButton.setOnAction(e->{
+            MainApplication.mainStage.setScene(new SignupScene());
+            MainApplication.mainStage.setTitle("Update Info");
+        });
 
             VBox vbox = new VBox();
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel);
+            vbox.setAlignment(Pos.CENTER);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, bmiLabel,updateButton, deleteButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
 
+        deleteButton.setOnAction(e->{
+            if(file.length() == 0){
+                error = new Text("THERE IS NO INFO TO DELETE");
+                vbox.getChildren().add(error);
+            }else{
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("person_info.txt"));
+                    writer.write("");
+                    writer.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         // Weekly tab
         Tab weeklyTab = new Tab("Weekly Report");
@@ -382,12 +398,12 @@ public class FormPane extends BorderPane {
     private String[] readPersonInfo(){
         String[] info = new String[6];
         try (BufferedReader br = new BufferedReader(new FileReader("person_info.txt"))) {
-            info[0] = "Name: " + br.readLine().trim();
-            info[1] = "Age: " + br.readLine().trim();
-            info[2] = "Gender: " + br.readLine().trim();
-            info[3] = "Height: " + br.readLine().trim();
-            info[4] = "Weight: " + br.readLine().trim();
-            info[5] = "Goal Weight: " + br.readLine().trim();
+            info[0] = br.readLine().trim(); //name
+            info[1] = br.readLine().trim();//age
+            info[2] = br.readLine().trim();//gender
+            info[3] = br.readLine().trim();//height
+            info[4] = br.readLine().trim();//weight
+            info[5] = br.readLine().trim();//goal weight
         }catch(IOException e){
             e.printStackTrace();
         }

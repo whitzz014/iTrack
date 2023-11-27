@@ -52,6 +52,11 @@ public class MainApplication extends Application {
             System.exit(0);
         });
 
+        MenuItem signup = new MenuItem("SIGNUP");
+        signup.setOnAction(event -> {
+            mainStage.setScene(new SignupScene());
+        });
+
         //Tracker Menu Item
         Menu navMenu = new Menu("iNavigation");
         MenuItem formItem = new MenuItem("Tracker");
@@ -68,7 +73,7 @@ public class MainApplication extends Application {
         MenuItem founderTwo = new MenuItem("Brock Whitson");
 
         creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
-        fileMenu.getItems().addAll(accountMenu, settingsMenu, exit);
+        fileMenu.getItems().addAll(accountMenu, settingsMenu, signup,exit);
         menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
         //Mayo De Noche
 

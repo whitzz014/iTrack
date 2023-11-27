@@ -149,16 +149,17 @@ public class SignupPane extends BorderPane {
             try {
                 PrintWriter signup = new PrintWriter("person_info.txt");
                 signup.println(name.getText());
-                signup.println(age.getText() + " years old");
+                signup.println(age.getText());
                 signup.println(gender.getValue());
-                signup.println(height.getText() + "cm");
-                signup.println(weight.getText() + "kg");
-                signup.println(goalWeight.getText() + "kg");
+                signup.println(height.getText());
+                signup.println(weight.getText());
+                signup.println(goalWeight.getText());
                 signup.close();
             } catch (IOException ex) {
                 System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
             }
 
+            MainApplication.mainStage.setScene(new FormScene());
         });
 
         //VBox for info
