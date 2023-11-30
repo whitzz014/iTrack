@@ -9,6 +9,5 @@ import javafx.scene.Scene;
 public class SignupScene extends Scene {
     public SignupScene() {
         super(new SignupPane(), ScreenRatio.SCREEN_WIDTH,ScreenRatio.SCREEN_HEIGHT);
-        MainApplication.mainStage.setTitle("Sign Up");
     }
 }

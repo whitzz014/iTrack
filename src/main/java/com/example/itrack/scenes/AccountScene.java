@@ -14,6 +14,5 @@ public class AccountScene extends Scene {
      */
     public AccountScene() {
         super(new SettingsPane(), ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
-        MainApplication.mainStage.setTitle("Account");
     }
 }

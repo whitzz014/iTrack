@@ -15,7 +15,6 @@ public class SettingsScene extends Scene {
      */
     public SettingsScene() {
         super(new SettingsPane(), ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
-        MainApplication.mainStage.setTitle("Settings");
 
     }
 }

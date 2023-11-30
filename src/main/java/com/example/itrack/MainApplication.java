@@ -15,11 +15,13 @@ import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SettingsScene;
 import com.example.itrack.scenes.SignupScene;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainApplication extends Application {
@@ -79,13 +81,23 @@ public class MainApplication extends Application {
 
         Database.getInstance();
 
+        File file = new File("person_info.txt");
+
+
+        Scene scene;
+        if (file.length() == 0){
+            scene = new SignupScene();
+        }else {
+            scene = new FormScene();
+        }
+
     //connect stage to mainStage
       mainStage = stage;
       //so user cant adjust application size
       mainStage.setResizable(false);
-
+      mainStage.setTitle("iTrack");
       //connect FormScene so it is the main scene
-      mainStage.setScene(new SignupScene());
+      mainStage.setScene(scene);
       mainStage.show();
     }
     public static void main(String[] args) {

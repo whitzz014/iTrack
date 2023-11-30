@@ -18,7 +18,6 @@ public class FormScene extends Scene {
      */
     public FormScene() {
         super(new FormPane(), ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
-        MainApplication.mainStage.setTitle("Tracker");
 
     }
 }

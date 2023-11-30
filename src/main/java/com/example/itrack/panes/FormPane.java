@@ -184,9 +184,7 @@ public class FormPane extends BorderPane {
          * when the signup button is clicked the users info is inputted to `person_info.txt`
          * If user is already filled out it is sends the user to tracker tab and displays all the info
          */
-       if (file.length() == 0){
 
-       }
 
 //       if (file.exists()){
 //           System.out.println("FILE EXISTS!");
