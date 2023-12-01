@@ -123,6 +123,7 @@ public class FormPane extends BorderPane {
         Text heightLabel = new Text("Height: " + info[3]);
         Text weightLabel = new Text("Weight: " + info[4]);
         Text goalWeightLabel = new Text("Goal Weight: " + info[5]);
+        Text activityText = new Text("Activity: " + info[6]);
 
         //Create BMI Math
         personHeight = Double.parseDouble(info[3]);
@@ -183,9 +184,11 @@ public class FormPane extends BorderPane {
             MainApplication.mainStage.setTitle("Update Info");
         });
 
+
+
             VBox vbox = new VBox();
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, bmiLabel,updateButton, deleteButton);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText,bmiLabel,updateButton, deleteButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
@@ -199,6 +202,7 @@ public class FormPane extends BorderPane {
                     BufferedWriter writer = new BufferedWriter(new FileWriter("person_info.txt"));
                     writer.write("");
                     writer.close();
+                    MainApplication.mainStage.setScene(new SignupScene());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -277,7 +281,7 @@ public class FormPane extends BorderPane {
     }
 
     private String[] readPersonInfo(){
-        String[] info = new String[6];
+        String[] info = new String[7];
         try (BufferedReader br = new BufferedReader(new FileReader("person_info.txt"))) {
             info[0] = br.readLine().trim(); //name
             info[1] = br.readLine().trim();//age
@@ -285,6 +289,7 @@ public class FormPane extends BorderPane {
             info[3] = br.readLine().trim();//height
             info[4] = br.readLine().trim();//weight
             info[5] = br.readLine().trim();//goal weight
+            info[6] = br.readLine().trim();//activity level
         }catch(IOException e){
             e.printStackTrace();
         }

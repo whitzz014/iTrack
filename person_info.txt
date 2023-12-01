@@ -1,6 +1,7 @@
-Brock
+Brock Whitson
 21
-Female
-188
-83
-83
+Male
+6.02
+185
+215
+Sedentary (little or no exercise)

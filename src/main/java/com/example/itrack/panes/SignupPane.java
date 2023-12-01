@@ -121,6 +121,17 @@ public class SignupPane extends BorderPane {
         goalWeightBox.setAlignment(Pos.CENTER);
         goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightComboBox);
 
+        Text activityText = new Text("Activity Level: ");
+        activityText.setFont(textFont);
+        ComboBox activityLevel = new ComboBox();
+        activityLevel.getItems().addAll("Sedentary (little or no exercise)", "Lightly active (light exercise/sports 1-3 days/week)"
+        , "Moderately active (moderate exercise/sports 3-5 days/week)", "Very active (hard exercise/sports 6-7 days a week)", "Extremely active (very hard exercise/sports & physical job or 2x training)");
+
+        //Hbox for activity level
+        HBox activeBox = new HBox();
+        activeBox.setAlignment(Pos.CENTER);
+        activeBox.getChildren().addAll(activityText, activityLevel);
+
         //Button
         Button signupButton = new Button("Enter");
         File file = new File("person_info.txt");
@@ -134,6 +145,7 @@ public class SignupPane extends BorderPane {
                 signup.println(height.getText());
                 signup.println(weight.getText());
                 signup.println(goalWeight.getText());
+                signup.println(activityLevel.getValue());
                 signup.close();
             } catch (IOException ex) {
                 System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
@@ -148,13 +160,14 @@ public class SignupPane extends BorderPane {
                 throw new RuntimeException(ex);
             }
 
+
             MainApplication.mainStage.setScene(new FormScene());
         });
 
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
+        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
 
         this.setCenter(signUpBox);
 
