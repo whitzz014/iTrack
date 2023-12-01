@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -44,6 +45,8 @@ public class FormPane extends BorderPane {
     private TextField carbsTextField;
     private Text error;
     private double bmiCalculator;
+
+    PieChart macroChart = new PieChart();
 
 
 
@@ -360,6 +363,8 @@ public class FormPane extends BorderPane {
                         DBConst. MEAL_COLUMN_TIMESTAMP +
                         ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
+                updateMacroChart();
+
                 try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                     // Set values for the parameters
                     String selectedMeal = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem());
@@ -389,6 +394,17 @@ public class FormPane extends BorderPane {
         gridPane.add(carbsLabel, 0, 4);
         gridPane.add(carbsTextField, 1, 4);
         gridPane.add(addButton, 1, 5);
+
+        //make pi chart
+//        Text hello = new Text("hello world");
+//        gridPane.add(hello, 0, 6);
+
+        macroChart.setTitle("Macro Distribution");
+
+        // Add components to the GridPane
+        gridPane.add(macroChart, 2, 0, 2, 6);
+
+
 
         return gridPane;
     }
@@ -422,4 +438,19 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
+
+    private void updateMacroChart() {
+        double calories = Double.parseDouble(caloriesTextField.getText());
+        double protein = Double.parseDouble(proteinTextField.getText());
+        double fat = Double.parseDouble(fatTextField.getText());
+        double carbs = Double.parseDouble(carbsTextField.getText());
+
+        macroChart.getData().clear(); // Clear existing data
+
+        macroChart.getData().add(new PieChart.Data("Protein", protein));
+        macroChart.getData().add(new PieChart.Data("Fat", fat));
+        macroChart.getData().add(new PieChart.Data("Carbs", carbs));
     }
+    }
+
+
