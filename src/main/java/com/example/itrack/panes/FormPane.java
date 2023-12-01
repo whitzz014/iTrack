@@ -350,38 +350,10 @@ public class FormPane extends BorderPane {
         // Create a button for adding the food to the database
         Button addButton = new Button("Add Food");
         addButton.setOnAction(e->{
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
-                                "?serverTimezone=UTC",
-                        DB_USER,
-                        DB_PASS);){
-                String insertQuery = "INSERT INTO " + DBConst.TABLE_MEAL + " (" +
-                        DBConst.MEAL_COLUMN_NAME + ", " +
-                        DBConst.MEAL_COLUMN_CALORIES + ", " +
-                        DBConst.MEAL_COLUMN_PROTEIN + ", " +
-                        DBConst.MEAL_COLUMN_FAT + ", " +
-                        DBConst.MEAL_COLUMN_CARBS + ", " +
-                        DBConst. MEAL_COLUMN_TIMESTAMP +
-                        ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+            insertFoodIntoMeals();
 
-                updateMacroChart();
-
-                try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                    // Set values for the parameters
-                    String selectedMeal = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem());
-//                    preparedStatement.setString(1, );
-//                    preparedStatement.setInt(2, valueForCalories);
-//                    preparedStatement.setInt(3, valueForProtein);
-//                    preparedStatement.setInt(4, valueForFat);
-//                    preparedStatement.setInt(5, valueForCarbs);
-
-                    // Execute the query
-                    preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }});
+            updateMacroChart();
+});
         // Add components to the GridPane
         gridPane.add(foodLabel, 0, 0);
         gridPane.add(foodComboBox, 1, 0);
@@ -450,6 +422,45 @@ public class FormPane extends BorderPane {
         macroChart.getData().add(new PieChart.Data("Protein", protein));
         macroChart.getData().add(new PieChart.Data("Fat", fat));
         macroChart.getData().add(new PieChart.Data("Carbs", carbs));
+    }
+
+    private void insertFoodIntoMeals() {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
+                        "?serverTimezone=UTC",
+                DB_USER,
+                DB_PASS);) {
+
+            String insertQuery = "INSERT INTO " + DBConst.TABLE_MEAL + " (" +
+                    DBConst.MEAL_COLUMN_NAME + ", " +
+                    DBConst.MEAL_COLUMN_CALORIES + ", " +
+                    DBConst.MEAL_COLUMN_PROTEIN + ", " +
+                    DBConst.MEAL_COLUMN_FAT + ", " +
+                    DBConst.MEAL_COLUMN_CARBS + ", " +
+                    DBConst.MEAL_COLUMN_TIMESTAMP +
+                    ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                // Set values for the parameters
+                String selectedFoodName = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem().getName());
+                double selectedCalories = Double.parseDouble(caloriesTextField.getText());
+                double selectedProtein = Double.parseDouble(proteinTextField.getText());
+                double selectedFat = Double.parseDouble(fatTextField.getText());
+                double selectedCarbs = Double.parseDouble(carbsTextField.getText());
+
+                preparedStatement.setString(1, selectedFoodName);
+                preparedStatement.setDouble(2, selectedCalories);
+                preparedStatement.setDouble(3, selectedProtein);
+                preparedStatement.setDouble(4, selectedFat);
+                preparedStatement.setDouble(5, selectedCarbs);
+
+                // Execute the query
+                preparedStatement.executeUpdate();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
     }
 
