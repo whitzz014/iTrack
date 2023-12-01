@@ -4,8 +4,6 @@ import com.example.itrack.MainApplication;
 import com.example.itrack.Pojo.Food;
 
 import com.example.itrack.Pojo.MealItem;
-import com.example.itrack.Pojo.PersonInfo;
-import com.example.itrack.Tables.PersonTable;
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.SignupScene;
 import com.example.itrack.tabs.MealsTab;
@@ -367,6 +365,17 @@ private GridPane createMealsGrid() {
         carbsColumn.setCellValueFactory(new PropertyValueFactory<>("carbs"));
 
         return table;
+    }
+
+
+    private int intakeCalories(TableView<MealItem> table){
+        int calsIntaked = 0;
+
+        for (MealItem mealItem : table.getItems()){
+            calsIntaked += mealItem.getCalories();
+        }
+        return calsIntaked;
+
     }
 
     private void updateMacroChart() {
