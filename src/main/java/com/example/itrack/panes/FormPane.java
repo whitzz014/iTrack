@@ -50,9 +50,13 @@ public class FormPane extends BorderPane {
     private double bmiCalculator;
 
     PieChart macroChart = new PieChart();
+    PieChart totalMacroChart = new PieChart();
     TableView<MealItem> mealTable = createMealTable();
 
-
+//dubles for total macros
+    private double tprotein = 0;
+    private double tfat = 0;
+    private double tcarbs = 0;
 
 
     public FormPane()  {
@@ -360,6 +364,8 @@ public class FormPane extends BorderPane {
             insertFoodIntoMeals();
 
             updateMacroChart();
+
+            updateTotalMacros();
 });
         // Add components to the GridPane
         gridPane.add(foodLabel, 0, 0);
@@ -421,6 +427,10 @@ private GridPane createMealsGrid() {
     GridPane gridPane = new GridPane();
 
     gridPane.add(mealTable, 0, 0);
+    totalMacroChart.setTitle("Total Macro Distribution");
+
+    // Add components to the GridPane
+    gridPane.add(totalMacroChart, 2, 0, 2, 6);
     return gridPane;
 }
 
@@ -457,6 +467,21 @@ private GridPane createMealsGrid() {
         macroChart.getData().add(new PieChart.Data("Fat", fat));
         macroChart.getData().add(new PieChart.Data("Carbs", carbs));
     }
+
+    private void updateTotalMacros() {
+//        double calories = Double.parseDouble(caloriesTextField.getText());
+
+        tprotein += Double.parseDouble(proteinTextField.getText());
+        tfat += Double.parseDouble(fatTextField.getText());
+        tcarbs += Double.parseDouble(carbsTextField.getText());
+
+        totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
+        totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
+        totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
+    }
+
 
     private void insertFoodIntoMeals() {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
