@@ -13,9 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.*;
 
 import static com.example.itrack.MainApplication.menu;
@@ -79,16 +77,18 @@ public class SignupPane extends BorderPane {
         Text heightTitle = new Text("Height: ");
         heightTitle.setFont(textFont);
         TextField height = new TextField();
-        height.setPromptText("190");
-        height.setFont(textFont);
-        Text measurement = new Text("cm");
-        measurement.setFont(textFont);
+
+        ComboBox heightMeasurementBox = new ComboBox();
+        heightMeasurementBox.getItems().addAll("Centimeters", "Feet");
+        heightMeasurementBox.setValue("Feet");
+
+
         //String userHeight = height.getText();
 
         //HBox for name
         HBox heightBox = new HBox();
         heightBox.setAlignment(Pos.CENTER);
-        heightBox.getChildren().addAll(heightTitle,height,measurement);
+        heightBox.getChildren().addAll(heightTitle,height,heightMeasurementBox);
 
         //WEIGHT
         Text weightTitle = new Text("Weight: ");
@@ -96,13 +96,14 @@ public class SignupPane extends BorderPane {
         TextField weight = new TextField();
         weight.setPromptText("83");
         weight.setFont(textFont);
-        Text weightMeasure = new Text("kg");
-        weightMeasure.setFont(textFont);
+        ComboBox weightComboBox = new ComboBox();
+        weightComboBox.getItems().addAll("kg", "lbs");
+        weightComboBox.setValue("lbs");
       //  int userWeight = Integer.parseInt(weight.getText());
         //HBox for name
         HBox weightBox = new HBox();
         weightBox.setAlignment(Pos.CENTER);
-        weightBox.getChildren().addAll(weightTitle,weight,weightMeasure);
+        weightBox.getChildren().addAll(weightTitle,weight,weightComboBox);
 
         //GOAL WEIGHT
         Text goalWeightTitle = new Text("Goal Weight: ");
@@ -110,39 +111,18 @@ public class SignupPane extends BorderPane {
         TextField goalWeight = new TextField();
         goalWeight.setPromptText("102");
         goalWeight.setFont(textFont);
-        Text gWeightMeasure = new Text("kg");
-        gWeightMeasure.setFont(textFont);
+        ComboBox gWeightComboBox = new ComboBox();
+        gWeightComboBox.getItems().addAll("kg", "lbs");
+        gWeightComboBox.setValue("lbs");
         // String userGoal = goalWeight.getText();
 
         //HBox for name
         HBox goalWeightBox = new HBox();
         goalWeightBox.setAlignment(Pos.CENTER);
-        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightMeasure);
+        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightComboBox);
 
         //Button
         Button signupButton = new Button("Enter");
-//        signupButton.setOnAction(e->{
-//            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
-//                            "?serverTimezone=UTC",
-//                    DB_USER,
-//                    DB_PASS);){
-//                String insertPersonQuery = "INSERT INTO " + DBConst.TABLE_PERSON_INFO +
-//                        "(name, age, gender, height, weight, goalWeight) VALUES (?, ?, ?, ?, ?, ?)";
-//                    PreparedStatement preparedStatement1 = connection.prepareStatement(insertPersonQuery);
-//                    preparedStatement1.setString(1, name.getText());
-//                    preparedStatement1.setInt(2, Integer.parseInt(age.getText()));
-//                    preparedStatement1.setString(3, gender.getValue());
-//                    preparedStatement1.setInt(4, Integer.parseInt(height.getText()));
-//                    preparedStatement1.setInt(5, Integer.parseInt(weight.getText()));
-//                    preparedStatement1.setInt(6, Integer.parseInt(goalWeight.getText()));
-//
-//                    preparedStatement1.executeUpdate();
-//                MainApplication.mainStage.setScene(new FormScene());
-//
-//            }catch (SQLException ev){
-//                ev.printStackTrace();
-//            }
-//        });
         File file = new File("person_info.txt");
 
         signupButton.setOnAction(e-> {
@@ -159,6 +139,15 @@ public class SignupPane extends BorderPane {
                 System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
             }
 
+            try {
+                PrintWriter measurementFile = new PrintWriter("measurements.txt");
+                measurementFile.println(weightComboBox.getValue());
+                measurementFile.println(heightMeasurementBox.getValue());
+                measurementFile.close();
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+
             MainApplication.mainStage.setScene(new FormScene());
         });
 
@@ -168,5 +157,8 @@ public class SignupPane extends BorderPane {
         signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
 
         this.setCenter(signUpBox);
+
+
     }
+
 }

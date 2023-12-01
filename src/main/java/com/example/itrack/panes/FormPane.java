@@ -2,10 +2,7 @@ package com.example.itrack.panes;
 
 import com.example.itrack.MainApplication;
 import com.example.itrack.Pojo.Food;
-import com.example.itrack.Pojo.PersonInfo;
-import com.example.itrack.Tables.PersonTable;
 import com.example.itrack.database.DBConst;
-import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SignupScene;
 import com.example.itrack.tabs.TrackerTab;
 import com.example.itrack.Tables.FoodTable;
@@ -18,20 +15,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.stage.Window;
 
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import static com.example.itrack.MainApplication.main;
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
@@ -44,7 +34,8 @@ public class FormPane extends BorderPane {
     private TextField carbsTextField;
     private Text error;
     private double bmiCalculator;
-
+    private  double personHeight;
+    private int personWeight;
 
 
 
@@ -59,138 +50,11 @@ public class FormPane extends BorderPane {
          */
        File file = new File("person_info.txt");
 
-       //signup info
-        Popup popup = new Popup();
+
         //Fonts
         Font textFont = Font.font("Trebuchet MS", 14);
         Font titleFont = Font.font("Trebuchet MS", 18);
         Font errorFont = new Font("Times New Roman", 12);
-
-        //Sign Up
-        //Title
-        Text title = new Text("Sign Up");
-        title.setFont(titleFont);
-
-        //Name
-        Text nameTitle = new Text("Name: ");
-        nameTitle.setFont(textFont);
-
-        TextField name = new TextField();
-        name.setPromptText("Brock Whitson");
-        name.setFont(textFont);
-
-        //HBox for name
-        HBox nameBox = new HBox();
-        nameBox.setAlignment(Pos.CENTER);
-        nameBox.getChildren().addAll(nameTitle,name);
-        // String personName = name.getText();
-        //Age
-        Text ageTitle = new Text("Age: ");
-        ageTitle.setFont(textFont);
-
-        TextField age = new TextField();
-        age.setPromptText("21");
-        age.setFont(textFont);
-        //   String personAge = age.getText();
-        //HBox for name
-        HBox ageBox = new HBox();
-        ageBox.setAlignment(Pos.CENTER);
-        ageBox.getChildren().addAll(ageTitle,age);
-
-        //GENDER
-        Text genderTitle = new Text("Gender: ");
-        genderTitle.setFont(textFont);
-        ComboBox<String> gender = new ComboBox();
-        gender.getItems().addAll("Male", "Female");
-
-        // String personGender = gender.getValue();
-
-        //HBox for name
-        HBox genderBox = new HBox();
-        genderBox.setAlignment(Pos.CENTER);
-        genderBox.getChildren().addAll(genderTitle,gender);
-
-        //HEIGHT
-        Text heightTitle = new Text("Height: ");
-        heightTitle.setFont(textFont);
-        TextField height = new TextField();
-        height.setPromptText("190");
-        height.setFont(textFont);
-        Text measurement = new Text("cm");
-        measurement.setFont(textFont);
-        //String userHeight = height.getText();
-
-        //HBox for name
-        HBox heightBox = new HBox();
-        heightBox.setAlignment(Pos.CENTER);
-        heightBox.getChildren().addAll(heightTitle,height,measurement);
-
-        //WEIGHT
-        Text weightTitle = new Text("Weight: ");
-        weightTitle.setFont(textFont);
-        TextField weight = new TextField();
-        weight.setPromptText("83");
-        weight.setFont(textFont);
-        Text weightMeasure = new Text("kg");
-        weightMeasure.setFont(textFont);
-        //  int userWeight = Integer.parseInt(weight.getText());
-        //HBox for name
-        HBox weightBox = new HBox();
-        weightBox.setAlignment(Pos.CENTER);
-        weightBox.getChildren().addAll(weightTitle,weight,weightMeasure);
-
-        //GOAL WEIGHT
-        Text goalWeightTitle = new Text("Goal Weight: ");
-        goalWeightTitle.setFont(textFont);
-        TextField goalWeight = new TextField();
-        goalWeight.setPromptText("102");
-        goalWeight.setFont(textFont);
-        Text gWeightMeasure = new Text("kg");
-        gWeightMeasure.setFont(textFont);
-        // String userGoal = goalWeight.getText();
-
-        //HBox for name
-        HBox goalWeightBox = new HBox();
-        goalWeightBox.setAlignment(Pos.CENTER);
-        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightMeasure);
-
-        //Button
-        Button signupButton = new Button("Enter");
-        signupButton.setOnAction(e-> {
-            try {
-                PrintWriter signup = new PrintWriter("person_info.txt");
-                signup.println(name.getText());
-                signup.println(age.getText());
-                signup.println(gender.getValue());
-                signup.println(height.getText());
-                signup.println(weight.getText());
-                signup.println(goalWeight.getText());
-                signup.close();
-            } catch (IOException ex) {
-                System.err.println("Error writing to " + file.getName() + ": " + ex.getMessage());
-            }
-
-        });
-        //VBox for info
-        VBox signUpBox = new VBox();
-        signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox, signupButton);
-
-
-
-        /**
-         * checks to see if file is empty
-         * if it is empty it displays a pop window for the user to input info
-         * when the signup button is clicked the users info is inputted to `person_info.txt`
-         * If user is already filled out it is sends the user to tracker tab and displays all the info
-         */
-
-
-//       if (file.exists()){
-//           System.out.println("FILE EXISTS!");
-//        }else{
-//           System.out.println("FILE DOESNT EXIST!");
-//       }
 
 
         // Create a GridPane for food tracking
@@ -243,9 +107,23 @@ public class FormPane extends BorderPane {
         Text goalWeightLabel = new Text("Goal Weight: " + info[5]);
 
         //Create BMI Math
-        int personHeight = Integer.parseInt(info[3]);
-        int personWeight = Integer.parseInt(info[4]);
+        personHeight = Double.parseDouble(info[3]);
+         personWeight = Integer.parseInt(info[4]);
         int personAge = Integer.parseInt(info[1]);
+        //read measurement file
+        String[] measurements = readMeasurements();
+
+//converts feet to cm
+        if ("Feet".equals(measurements[1].trim())){
+          feetToCm();
+        }
+//converts lbs to kg
+        if ("lbs".equals(measurements[0].trim())){
+            lbsToKg();
+        }
+
+     //   System.out.println("height in cm: " + personHeight);
+
          bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
          String fitLevel = "";
          String formatBMI = String.format("%.2f", bmiCalculator);
@@ -407,6 +285,16 @@ public class FormPane extends BorderPane {
         }
         return info;
     }
+    private String[] readMeasurements(){
+        String[] measurements = new String[2];
+        try ( BufferedReader measurementReader = new BufferedReader(new FileReader("measurements.txt"))) {
+            measurements[0] = measurementReader.readLine().trim();
+            measurements[1] = measurementReader.readLine().trim();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return measurements;
+    }
 
 //    private TabPane createTabPane() {
 //        TabPane tabPane = new TabPane();
@@ -422,4 +310,22 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
+
+    private double feetToCm(){
+        //calcs just feet
+        int feetOnly = (int) personHeight;
+        //takes just the inches
+        double inchesPart = (personHeight - feetOnly) * 100;
+        //  System.out.println("IN: " + inchesPart);
+        double heightCm = feetOnly * 30.48;
+        heightCm += inchesPart * 2.54;
+        personHeight = heightCm;
+        return personHeight;
+    }
+
+    private int lbsToKg(){
+        double  weightKg = personWeight * 0.453592;
+        personWeight = (int) weightKg;
+        return personWeight;
+    }
     }
