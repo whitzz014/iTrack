@@ -4,22 +4,22 @@ package com.example.itrack.tabs;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 
-public class TrackerTab extends Tab {
+public class MealsTab extends Tab {
 
-    private static TrackerTab instance;
+    private static MealsTab instance;
 
 
 
-    private TrackerTab(){
-        this.setText("Add Item");
+    private MealsTab(){
+        this.setText("Tracker");
         GridPane root = new GridPane();
         this.setContent(root);
     }
 
 
-    public static TrackerTab getInstance(){
+    public static MealsTab getInstance(){
         if (instance == null){
-            instance = new TrackerTab();
+            instance = new MealsTab();
         }
         return instance;
     }

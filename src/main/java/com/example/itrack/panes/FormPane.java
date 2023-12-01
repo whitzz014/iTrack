@@ -2,11 +2,13 @@ package com.example.itrack.panes;
 
 import com.example.itrack.MainApplication;
 import com.example.itrack.Pojo.Food;
+import com.example.itrack.Pojo.MealItem;
 import com.example.itrack.Pojo.PersonInfo;
 import com.example.itrack.Tables.PersonTable;
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SignupScene;
+import com.example.itrack.tabs.MealsTab;
 import com.example.itrack.tabs.TrackerTab;
 import com.example.itrack.Tables.FoodTable;
 import javafx.collections.FXCollections;
@@ -15,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -47,6 +50,7 @@ public class FormPane extends BorderPane {
     private double bmiCalculator;
 
     PieChart macroChart = new PieChart();
+    TableView<MealItem> mealTable = createMealTable();
 
 
 
@@ -206,12 +210,15 @@ public class FormPane extends BorderPane {
        VBox navOrder = new VBox();
        navOrder.getChildren().addAll(menu, tabPane);
 
-
        // Create tabs and add them to the TabPane
        TrackerTab addItemTab = TrackerTab.getInstance();
         addItemTab.setClosable(false);
         addItemTab.setContent(gridPane);
 //        Tab anotherTab = new Tab("Another Tab");
+        GridPane mealsGrid = createMealsGrid();
+        MealsTab mealsTab = MealsTab.getInstance();
+        mealsTab.setClosable(false);
+        mealsTab.setContent(mealsGrid);
 
         //Fill Tracker Tab with info
 
@@ -318,7 +325,7 @@ public class FormPane extends BorderPane {
 
 
         // Create a TabPane
-        tabPane.getTabs().addAll(personTab, addItemTab, weeklyTab);
+        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab, weeklyTab);
 
         // Add the TabPane to the bottom of the BorderPane
 
@@ -410,6 +417,33 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
+private GridPane createMealsGrid() {
+    GridPane gridPane = new GridPane();
+
+    gridPane.add(mealTable, 0, 0);
+    return gridPane;
+}
+
+    private TableView<MealItem> createMealTable() {
+        TableView<MealItem> table = new TableView<>();
+
+        TableColumn<MealItem, String> nameColumn = new TableColumn<>("Food Name");
+        TableColumn<MealItem, Double> caloriesColumn = new TableColumn<>("Calories");
+        TableColumn<MealItem, Double> proteinColumn = new TableColumn<>("Protein");
+        TableColumn<MealItem, Double> fatColumn = new TableColumn<>("Fat");
+        TableColumn<MealItem, Double> carbsColumn = new TableColumn<>("Carbs");
+
+        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn);
+
+        // Set cell value factories
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("foodName"));
+        caloriesColumn.setCellValueFactory(new PropertyValueFactory<>("calories"));
+        proteinColumn.setCellValueFactory(new PropertyValueFactory<>("protein"));
+        fatColumn.setCellValueFactory(new PropertyValueFactory<>("fat"));
+        carbsColumn.setCellValueFactory(new PropertyValueFactory<>("carbs"));
+
+        return table;
+    }
 
     private void updateMacroChart() {
         double calories = Double.parseDouble(caloriesTextField.getText());
@@ -455,6 +489,12 @@ public class FormPane extends BorderPane {
 
                 // Execute the query
                 preparedStatement.executeUpdate();
+
+                // Create a new MealItem
+                MealItem mealItem = new MealItem(selectedFoodName, selectedCalories, selectedProtein, selectedFat, selectedCarbs);
+
+                // Add the MealItem to the TableView
+                mealTable.getItems().add(mealItem);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
