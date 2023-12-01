@@ -77,7 +77,7 @@ public class MainApplication extends Application {
         creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
         fileMenu.getItems().addAll(accountMenu, settingsMenu, signup,exit);
         menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
-        //Mayo De Noche
+        //Mayo De Noche purfavor
 
         Database.getInstance();
 

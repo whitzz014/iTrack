@@ -2,15 +2,24 @@ package com.example.itrack.panes;
 
 import com.example.itrack.MainApplication;
 import com.example.itrack.Pojo.Food;
+<<<<<<< HEAD
+=======
+import com.example.itrack.Pojo.MealItem;
+import com.example.itrack.Pojo.PersonInfo;
+import com.example.itrack.Tables.PersonTable;
+>>>>>>> e7eb5e8a0b35aae94ed7e74e016e229ff9bdd3f3
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.SignupScene;
+import com.example.itrack.tabs.MealsTab;
 import com.example.itrack.tabs.TrackerTab;
 import com.example.itrack.Tables.FoodTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,9 +43,20 @@ public class FormPane extends BorderPane {
     private TextField carbsTextField;
     private Text error;
     private double bmiCalculator;
+<<<<<<< HEAD
     private  double personHeight;
     private int personWeight;
+=======
 
+    PieChart macroChart = new PieChart();
+    PieChart totalMacroChart = new PieChart();
+    TableView<MealItem> mealTable = createMealTable();
+>>>>>>> e7eb5e8a0b35aae94ed7e74e016e229ff9bdd3f3
+
+//dubles for total macros
+    private double tprotein = 0;
+    private double tfat = 0;
+    private double tcarbs = 0;
 
 
     public FormPane()  {
@@ -67,12 +87,15 @@ public class FormPane extends BorderPane {
        VBox navOrder = new VBox();
        navOrder.getChildren().addAll(menu, tabPane);
 
-
        // Create tabs and add them to the TabPane
        TrackerTab addItemTab = TrackerTab.getInstance();
         addItemTab.setClosable(false);
         addItemTab.setContent(gridPane);
 //        Tab anotherTab = new Tab("Another Tab");
+        GridPane mealsGrid = createMealsGrid();
+        MealsTab mealsTab = MealsTab.getInstance();
+        mealsTab.setClosable(false);
+        mealsTab.setContent(mealsGrid);
 
         //Fill Tracker Tab with info
 
@@ -193,7 +216,7 @@ public class FormPane extends BorderPane {
 
 
         // Create a TabPane
-        tabPane.getTabs().addAll(personTab, addItemTab, weeklyTab);
+        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab, weeklyTab);
 
         // Add the TabPane to the bottom of the BorderPane
 
@@ -225,36 +248,12 @@ public class FormPane extends BorderPane {
         // Create a button for adding the food to the database
         Button addButton = new Button("Add Food");
         addButton.setOnAction(e->{
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+ DB_NAME +
-                                "?serverTimezone=UTC",
-                        DB_USER,
-                        DB_PASS);){
-                String insertQuery = "INSERT INTO " + DBConst.TABLE_MEAL + " (" +
-                        DBConst.MEAL_COLUMN_NAME + ", " +
-                        DBConst.MEAL_COLUMN_CALORIES + ", " +
-                        DBConst.MEAL_COLUMN_PROTEIN + ", " +
-                        DBConst.MEAL_COLUMN_FAT + ", " +
-                        DBConst.MEAL_COLUMN_CARBS + ", " +
-                        DBConst. MEAL_COLUMN_TIMESTAMP +
-                        ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+            insertFoodIntoMeals();
 
-                try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                    // Set values for the parameters
-                    String selectedMeal = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem());
-//                    preparedStatement.setString(1, );
-//                    preparedStatement.setInt(2, valueForCalories);
-//                    preparedStatement.setInt(3, valueForProtein);
-//                    preparedStatement.setInt(4, valueForFat);
-//                    preparedStatement.setInt(5, valueForCarbs);
+            updateMacroChart();
 
-                    // Execute the query
-                    preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }});
+            updateTotalMacros();
+});
         // Add components to the GridPane
         gridPane.add(foodLabel, 0, 0);
         gridPane.add(foodComboBox, 1, 0);
@@ -267,6 +266,17 @@ public class FormPane extends BorderPane {
         gridPane.add(carbsLabel, 0, 4);
         gridPane.add(carbsTextField, 1, 4);
         gridPane.add(addButton, 1, 5);
+
+        //make pi chart
+//        Text hello = new Text("hello world");
+//        gridPane.add(hello, 0, 6);
+
+        macroChart.setTitle("Macro Distribution");
+
+        // Add components to the GridPane
+        gridPane.add(macroChart, 2, 0, 2, 6);
+
+
 
         return gridPane;
     }
@@ -310,6 +320,7 @@ public class FormPane extends BorderPane {
 //        return tabPane;
 //    }
     //hello
+<<<<<<< HEAD
 
     private double feetToCm(){
         //calcs just feet
@@ -328,4 +339,112 @@ public class FormPane extends BorderPane {
         personWeight = (int) weightKg;
         return personWeight;
     }
+=======
+private GridPane createMealsGrid() {
+    GridPane gridPane = new GridPane();
+
+    gridPane.add(mealTable, 0, 0);
+    totalMacroChart.setTitle("Total Macro Distribution");
+
+    // Add components to the GridPane
+    gridPane.add(totalMacroChart, 2, 0, 2, 6);
+    return gridPane;
+}
+
+    private TableView<MealItem> createMealTable() {
+        TableView<MealItem> table = new TableView<>();
+
+        TableColumn<MealItem, String> nameColumn = new TableColumn<>("Food Name");
+        TableColumn<MealItem, Double> caloriesColumn = new TableColumn<>("Calories");
+        TableColumn<MealItem, Double> proteinColumn = new TableColumn<>("Protein");
+        TableColumn<MealItem, Double> fatColumn = new TableColumn<>("Fat");
+        TableColumn<MealItem, Double> carbsColumn = new TableColumn<>("Carbs");
+
+        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn);
+
+        // Set cell value factories
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("foodName"));
+        caloriesColumn.setCellValueFactory(new PropertyValueFactory<>("calories"));
+        proteinColumn.setCellValueFactory(new PropertyValueFactory<>("protein"));
+        fatColumn.setCellValueFactory(new PropertyValueFactory<>("fat"));
+        carbsColumn.setCellValueFactory(new PropertyValueFactory<>("carbs"));
+
+        return table;
+>>>>>>> e7eb5e8a0b35aae94ed7e74e016e229ff9bdd3f3
     }
+
+    private void updateMacroChart() {
+        double calories = Double.parseDouble(caloriesTextField.getText());
+        double protein = Double.parseDouble(proteinTextField.getText());
+        double fat = Double.parseDouble(fatTextField.getText());
+        double carbs = Double.parseDouble(carbsTextField.getText());
+
+        macroChart.getData().clear(); // Clear existing data
+
+        macroChart.getData().add(new PieChart.Data("Protein", protein));
+        macroChart.getData().add(new PieChart.Data("Fat", fat));
+        macroChart.getData().add(new PieChart.Data("Carbs", carbs));
+    }
+
+    private void updateTotalMacros() {
+//        double calories = Double.parseDouble(caloriesTextField.getText());
+
+        tprotein += Double.parseDouble(proteinTextField.getText());
+        tfat += Double.parseDouble(fatTextField.getText());
+        tcarbs += Double.parseDouble(carbsTextField.getText());
+
+        totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
+        totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
+        totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
+    }
+
+
+    private void insertFoodIntoMeals() {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
+                        "?serverTimezone=UTC",
+                DB_USER,
+                DB_PASS);) {
+
+            String insertQuery = "INSERT INTO " + DBConst.TABLE_MEAL + " (" +
+                    DBConst.MEAL_COLUMN_NAME + ", " +
+                    DBConst.MEAL_COLUMN_CALORIES + ", " +
+                    DBConst.MEAL_COLUMN_PROTEIN + ", " +
+                    DBConst.MEAL_COLUMN_FAT + ", " +
+                    DBConst.MEAL_COLUMN_CARBS + ", " +
+                    DBConst.MEAL_COLUMN_TIMESTAMP +
+                    ") VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                // Set values for the parameters
+                String selectedFoodName = String.valueOf(foodComboBox.getSelectionModel().getSelectedItem().getName());
+                double selectedCalories = Double.parseDouble(caloriesTextField.getText());
+                double selectedProtein = Double.parseDouble(proteinTextField.getText());
+                double selectedFat = Double.parseDouble(fatTextField.getText());
+                double selectedCarbs = Double.parseDouble(carbsTextField.getText());
+
+                preparedStatement.setString(1, selectedFoodName);
+                preparedStatement.setDouble(2, selectedCalories);
+                preparedStatement.setDouble(3, selectedProtein);
+                preparedStatement.setDouble(4, selectedFat);
+                preparedStatement.setDouble(5, selectedCarbs);
+
+                // Execute the query
+                preparedStatement.executeUpdate();
+
+                // Create a new MealItem
+                MealItem mealItem = new MealItem(selectedFoodName, selectedCalories, selectedProtein, selectedFat, selectedCarbs);
+
+                // Add the MealItem to the TableView
+                mealTable.getItems().add(mealItem);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    }
+
+
