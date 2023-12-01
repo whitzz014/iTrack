@@ -83,7 +83,12 @@ public class MainApplication extends Application {
 
         File file = new File("person_info.txt");
 
-
+/**
+ * checks to see if file is empty
+ * if it is empty it displays a pop window for the user to input info
+ * when the signup button is clicked the users info is inputted to `person_info.txt`
+ * If user is already filled out it is sends the user to tracker tab and displays all the info
+ */
         Scene scene;
         if (file.length() == 0){
             scene = new SignupScene();
