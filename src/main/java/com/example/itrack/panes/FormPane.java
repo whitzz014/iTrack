@@ -5,6 +5,7 @@ import com.example.itrack.Pojo.Food;
 
 import com.example.itrack.Pojo.MealItem;
 import com.example.itrack.database.DBConst;
+import com.example.itrack.math.CalCalc;
 import com.example.itrack.scenes.SignupScene;
 import com.example.itrack.tabs.MealsTab;
 import com.example.itrack.tabs.TrackerTab;
@@ -126,9 +127,7 @@ public class FormPane extends BorderPane {
         Text activityText = new Text("Activity: " + info[6]);
 
         //Create BMI Math
-        personHeight = Double.parseDouble(info[3]);
-         personWeight = Integer.parseInt(info[4]);
-        int personAge = Integer.parseInt(info[1]);
+
         //read measurement file
         String[] measurements = readMeasurements();
 
@@ -143,7 +142,7 @@ public class FormPane extends BorderPane {
 
      //   System.out.println("height in cm: " + personHeight);
 
-         bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
+         bmiCalculator = Integer.parseInt(info[4]) / (Double.parseDouble(info[3]) / 100.0) * (Double.parseDouble(info[3]) / 100.0);
          String fitLevel = "";
          String formatBMI = String.format("%.2f", bmiCalculator);
         Text bmiLabel = new Text();
@@ -176,6 +175,12 @@ public class FormPane extends BorderPane {
             bmiLabel.setFill(Color.GREEN);
         }
 
+        //cal intake calc
+        CalCalc calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]),Integer.parseInt(info[5]), info[6]);
+        String totalCals = String.valueOf(calCalc.getTotalCal());
+        Text calIntake =new Text("Calories Needed: " + totalCals);
+
+
         Button deleteButton = new Button("DELETE");
 
         Button updateButton = new Button("UPDATE");
@@ -188,7 +193,7 @@ public class FormPane extends BorderPane {
 
             VBox vbox = new VBox();
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText,bmiLabel,updateButton, deleteButton);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText,calIntake, bmiLabel,updateButton, deleteButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
@@ -283,13 +288,13 @@ public class FormPane extends BorderPane {
     private String[] readPersonInfo(){
         String[] info = new String[7];
         try (BufferedReader br = new BufferedReader(new FileReader("person_info.txt"))) {
-            info[0] = br.readLine().trim(); //name
-            info[1] = br.readLine().trim();//age
-            info[2] = br.readLine().trim();//gender
-            info[3] = br.readLine().trim();//height
-            info[4] = br.readLine().trim();//weight
-            info[5] = br.readLine().trim();//goal weight
-            info[6] = br.readLine().trim();//activity level
+            info[0] = br.readLine(); //name
+            info[1] = br.readLine();//age
+            info[2] = br.readLine();//gender
+            info[3] = br.readLine();//height
+            info[4] = br.readLine();//weight
+            info[5] = br.readLine();//goal weight
+            info[6] = br.readLine();//activity level
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -306,19 +311,7 @@ public class FormPane extends BorderPane {
         return measurements;
     }
 
-//    private TabPane createTabPane() {
-//        TabPane tabPane = new TabPane();
-//
-//        // Create tabs and add them to the TabPane
-//        TrackerTab addItemTab = TrackerTab.getInstance();
-//        addItemTab.setClosable(false);
-//
-//        Tab anotherTab = new Tab("Another Tab");
-//        // Add content to the additional tabs as needed
-//        tabPane.getTabs().addAll(addItemTab, anotherTab);
-//
-//        return tabPane;
-//    }
+
     //hello
 
 

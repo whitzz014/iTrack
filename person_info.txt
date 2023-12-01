@@ -1,7 +1,7 @@
 Brock Whitson
 21
 Male
-6.02
-185
-215
-Sedentary (little or no exercise)
+190
+83
+102
+Very active (hard exercise/sports 6-7 days a week)
