@@ -448,7 +448,7 @@ private GridPane createMealsGrid() {
                     // Call a method to handle the delete logic
                     deleteMealItem(mealItem);
 
-                   deleteTotalMacros(mealItem);
+
 
                 });
             }
@@ -485,6 +485,8 @@ private GridPane createMealsGrid() {
         Optional<ButtonType> result = confirmationDialog.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            //the below method deletes the data from the graph
+            deleteTotalMacros(mealItem);
             // User confirmed deletion
             try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
                             "?serverTimezone=UTC",
