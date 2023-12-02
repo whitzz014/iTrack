@@ -40,6 +40,7 @@ public class FormPane extends BorderPane {
     private TextField carbsTextField;
     private Text error;
     private double bmiCalculator;
+    private CalCalc calCalc;
 
     private  double personHeight;
     private int personWeight;
@@ -116,7 +117,6 @@ public class FormPane extends BorderPane {
         BorderPane personPane = new BorderPane();
         //PersonTable personTable = new PersonTable();
         Tab personTab = new Tab("Personal Info");
-
         String[] info = readPersonInfo();
         Text nameLabel = new Text("Name: " + info[0]);
         Text ageLabel = new Text("Age: " + info[1]);
@@ -126,23 +126,25 @@ public class FormPane extends BorderPane {
         Text goalWeightLabel = new Text("Goal Weight: " + info[5]);
         Text activityText = new Text("Activity: " + info[6]);
 
-        //Create BMI Math
+
 
         //read measurement file
         String[] measurements = readMeasurements();
 
 //converts feet to cm
-        if ("Feet".equals(measurements[1].trim())){
-          feetToCm();
+        if ("Feet".equals(measurements[1])){
+            feetToCm();
         }
 //converts lbs to kg
-        if ("lbs".equals(measurements[0].trim())){
+        if ("lbs".equals(measurements[0])){
             lbsToKg();
         }
-
      //   System.out.println("height in cm: " + personHeight);
+//Create BMI Math
+//        personWeight = Integer.parseInt(info[4]);
+//        personHeight = Integer.parseInt(info[3]);
 
-         bmiCalculator = Integer.parseInt(info[4]) / (Double.parseDouble(info[3]) / 100.0) * (Double.parseDouble(info[3]) / 100.0);
+         bmiCalculator = personWeight / (personHeight / 100.0) * (personHeight / 100.0);
          String fitLevel = "";
          String formatBMI = String.format("%.2f", bmiCalculator);
         Text bmiLabel = new Text();
@@ -176,7 +178,7 @@ public class FormPane extends BorderPane {
         }
 
         //cal intake calc
-        CalCalc calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]),Integer.parseInt(info[5]), info[6]);
+        calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Double.parseDouble(info[3]), Double.parseDouble(info[4]),Double.parseDouble(info[5]), info[6]);
         String totalCals = String.valueOf(calCalc.getTotalCal());
         Text calIntake =new Text("Calories Needed: " + totalCals);
 
@@ -216,8 +218,14 @@ public class FormPane extends BorderPane {
 
         // Weekly tab
         Tab weeklyTab = new Tab("Weekly Report");
+        int weeklyCals = calCalc.getTotalCal() * 7;
+        int consumedCals = intakeCalories();
+        int proteinNeeded = recProteinAmount();
+        int fatsNeed = recFatAmount();
+        int carbsNeed = recCarbAmount();
 
-
+        System.out.println("Protein: " + proteinNeeded + "\nFats: " + fatsNeed + "\nCarbs: " + carbsNeed);
+        System.out.println(consumedCals);
 
         // Create a TabPane
         tabPane.getTabs().addAll(personTab, addItemTab,mealsTab, weeklyTab);
@@ -366,16 +374,6 @@ private GridPane createMealsGrid() {
     }
 
 
-    private int intakeCalories(TableView<MealItem> table){
-        int calsIntaked = 0;
-
-        for (MealItem mealItem : table.getItems()){
-            calsIntaked += mealItem.getCalories();
-        }
-        return calsIntaked;
-
-    }
-
     private void updateMacroChart() {
         double calories = Double.parseDouble(caloriesTextField.getText());
         double protein = Double.parseDouble(proteinTextField.getText());
@@ -448,6 +446,54 @@ private GridPane createMealsGrid() {
             throw new RuntimeException(ex);
         }
     }
+    private int intakeCalories(){
+        TableView<MealItem> table = new TableView<MealItem>();
+        int calsIntaked = 0;
+
+        for (MealItem mealItem : table.getItems()){
+            calsIntaked += mealItem.getCalories();
+        }
+        return calsIntaked;
+
     }
+     private int proteinIntake(){
+         TableView<MealItem> table = new TableView<MealItem>();
+         int proteinIntake = 0;
+
+         for (MealItem mealItem : table.getItems()){
+             proteinIntake += mealItem.getCalories();
+         }
+         return proteinIntake;
+     }
+     private int fatIntake(){
+         TableView<MealItem> table = new TableView<MealItem>();
+         int fatIntake = 0;
+
+         for (MealItem mealItem : table.getItems()){
+             fatIntake += mealItem.getCalories();
+         }
+         return fatIntake;
+     }
+     private int carbsIntake(){
+         TableView<MealItem> table = new TableView<MealItem>();
+         int carbsIntake = 0;
+
+         for (MealItem mealItem : table.getItems()){
+             carbsIntake += mealItem.getCalories();
+         }
+         return carbsIntake;
+     }
+
+     private int recProteinAmount(){
+         return (int) ((0.25 * calCalc.getTdee())/4);
+     }
+     private int recCarbAmount() {
+         return (int) ((0.50 * calCalc.getTdee()) / 4);
+     }
+     private int recFatAmount(){
+            return (int) ((0.25 * calCalc.getTdee()) / 9);
+         }
+     }
+
 
 
