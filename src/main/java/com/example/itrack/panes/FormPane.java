@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 
 import java.io.*;
 import java.sql.*;
+import java.util.Optional;
 
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
@@ -393,8 +394,7 @@ private GridPane createMealsGrid() {
         TableColumn<MealItem, Double> proteinColumn = new TableColumn<>("Protein");
         TableColumn<MealItem, Double> fatColumn = new TableColumn<>("Fat");
         TableColumn<MealItem, Double> carbsColumn = new TableColumn<>("Carbs");
-
-        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn);
+        TableColumn<MealItem, Void> actionColumn = new TableColumn<>("Actions");
 
         // Set cell value factories
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("foodName"));
@@ -403,7 +403,91 @@ private GridPane createMealsGrid() {
         fatColumn.setCellValueFactory(new PropertyValueFactory<>("fat"));
         carbsColumn.setCellValueFactory(new PropertyValueFactory<>("carbs"));
 
+        // Create a cell factory for the action column
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button updateButton = new Button("Update");
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                // Set actions for the buttons
+                updateButton.setOnAction(event -> {
+                    MealItem mealItem = getTableView().getItems().get(getIndex());
+                    // Call a method to handle the update logic
+                    updateMealItem(mealItem);
+                });
+
+                deleteButton.setOnAction(event -> {
+                    MealItem mealItem = getTableView().getItems().get(getIndex());
+                    // Call a method to handle the delete logic
+                    deleteMealItem(mealItem);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox buttons = new HBox(updateButton, deleteButton);
+                    buttons.setSpacing(5);
+                    setGraphic(buttons);
+                }
+            }
+        });
+
+        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn, actionColumn);
+
         return table;
+    }
+
+    private void updateMealItem(MealItem mealItem) {
+
+    }
+
+    private void deleteMealItem(MealItem mealItem) {
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Delete Confirmation");
+        confirmationDialog.setHeaderText(null);
+        confirmationDialog.setContentText("Are you sure you want to delete this item?");
+
+        Optional<ButtonType> result = confirmationDialog.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // User confirmed deletion
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
+                            "?serverTimezone=UTC",
+                    DB_USER,
+                    DB_PASS);) {
+
+                String deleteQuery = "DELETE FROM " + DBConst.TABLE_MEAL + " WHERE " +
+                        DBConst.MEAL_COLUMN_NAME + " = ? AND " +
+                        DBConst.MEAL_COLUMN_CALORIES + " = ? AND " +
+                        DBConst.MEAL_COLUMN_PROTEIN + " = ? AND " +
+                        DBConst.MEAL_COLUMN_FAT + " = ? AND " +
+                        DBConst.MEAL_COLUMN_CARBS + " = ?";
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+                    // Set values for the parameters
+                    preparedStatement.setString(1, mealItem.getFoodName());
+                    preparedStatement.setDouble(2, mealItem.getCalories());
+                    preparedStatement.setDouble(3, mealItem.getProtein());
+                    preparedStatement.setDouble(4, mealItem.getFat());
+                    preparedStatement.setDouble(5, mealItem.getCarbs());
+
+                    // Execute the query
+                    preparedStatement.executeUpdate();
+
+                    // Remove the item from the table
+                    mealTable.getItems().remove(mealItem);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
 
