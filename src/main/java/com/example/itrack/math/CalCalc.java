@@ -43,7 +43,7 @@ public class CalCalc {
         }
     }
 
-    private int calculateTotalCal(int goalWeight) {
+    private int calculateTotalCal(double goalWeight) {
             if (weight > goalWeight) {
                 return (int) (tdee - 500);
             } else if (weight < goalWeight) {
@@ -54,30 +54,6 @@ public class CalCalc {
     }
 
     // Getters and other methods...
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public double getTdee() {
         return tdee;

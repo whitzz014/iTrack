@@ -117,6 +117,7 @@ public class FormPane extends BorderPane {
         BorderPane personPane = new BorderPane();
         //PersonTable personTable = new PersonTable();
         Tab personTab = new Tab("Personal Info");
+
         String[] info = readPersonInfo();
         Text nameLabel = new Text("Name: " + info[0]);
         Text ageLabel = new Text("Age: " + info[1]);
@@ -127,27 +128,23 @@ public class FormPane extends BorderPane {
         Text activityText = new Text("Activity: " + info[6]);
 
 
-
-        //read measurement file
         String[] measurements = readMeasurements();
 
 //converts feet to cm
-        if ("Feet".equals(measurements[1])){
+        if ("Feet".equals(measurements[1].trim())){
             feetToCm();
         }
 //converts lbs to kg
-        if ("lbs".equals(measurements[0])){
+        if ("lbs".equals(measurements[0].trim())){
             lbsToKg();
         }
-     //   System.out.println("height in cm: " + personHeight);
-//Create BMI Math
-//        personWeight = Integer.parseInt(info[4]);
-//        personHeight = Integer.parseInt(info[3]);
 
-         bmiCalculator = personWeight / (personHeight / 100.0) * (personHeight / 100.0);
+        //   System.out.println("height in cm: " + personHeight);
+
+        bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
          String fitLevel = "";
          String formatBMI = String.format("%.2f", bmiCalculator);
-        Text bmiLabel = new Text();
+        Text bmiLabel;
 
         if (bmiCalculator <= 18.5){
             fitLevel = "Underweight";
@@ -195,7 +192,7 @@ public class FormPane extends BorderPane {
 
             VBox vbox = new VBox();
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText,calIntake, bmiLabel,updateButton, deleteButton);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText, calIntake, bmiLabel,updateButton, deleteButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
@@ -218,13 +215,13 @@ public class FormPane extends BorderPane {
 
         // Weekly tab
         Tab weeklyTab = new Tab("Weekly Report");
-        int weeklyCals = calCalc.getTotalCal() * 7;
+        int weeklyCals = calCalc.getTotalCal();
         int consumedCals = intakeCalories();
         int proteinNeeded = recProteinAmount();
         int fatsNeed = recFatAmount();
         int carbsNeed = recCarbAmount();
 
-        System.out.println("Protein: " + proteinNeeded + "\nFats: " + fatsNeed + "\nCarbs: " + carbsNeed);
+        System.out.println("Calories: " + weeklyCals + "\nProtein: " + proteinNeeded + "\nFats: " + fatsNeed + "\nCarbs: " + carbsNeed);
         System.out.println(consumedCals);
 
         // Create a TabPane
@@ -296,13 +293,32 @@ public class FormPane extends BorderPane {
     private String[] readPersonInfo(){
         String[] info = new String[7];
         try (BufferedReader br = new BufferedReader(new FileReader("person_info.txt"))) {
-            info[0] = br.readLine(); //name
-            info[1] = br.readLine();//age
-            info[2] = br.readLine();//gender
-            info[3] = br.readLine();//height
-            info[4] = br.readLine();//weight
-            info[5] = br.readLine();//goal weight
-            info[6] = br.readLine();//activity level
+            info[0] = br.readLine().trim(); //name
+            info[1] = br.readLine().trim();//age
+            info[2] = br.readLine().trim();//gender
+            info[3] = br.readLine().trim();//height
+            info[4] = br.readLine().trim();//weight
+            info[5] = br.readLine().trim();//goal weight
+            info[6] = br.readLine().trim();//activity level
+
+            try {
+                personHeight = Double.parseDouble(info[3]);
+                System.out.println(personHeight);
+            } catch (NumberFormatException e) {
+                // Handle the case where height is not a valid double
+                System.out.println("Error: Invalid height format in person_info.txt");
+                personHeight = 0; // Set a default value or take appropriate action
+            }
+
+            // Convert weight to an integer value
+            try {
+                personWeight = Integer.parseInt(info[4]);
+                System.out.println(personWeight);
+            } catch (NumberFormatException e) {
+                // Handle the case where weight is not a valid integer
+                System.out.println("Error: Invalid weight format in person_info.txt");
+                personWeight = 0; // Set a default value or take appropriate action
+            }
         }catch(IOException e){
             e.printStackTrace();
         }
