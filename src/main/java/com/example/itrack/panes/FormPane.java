@@ -548,7 +548,7 @@ private GridPane createMealsGrid() {
 
         totalMacroChart.getData().clear(); // Clear existing data
 
-
+//resets the macros to what they should be resulting in an animation
         totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
         totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
         totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
