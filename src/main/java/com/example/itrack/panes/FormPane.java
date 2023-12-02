@@ -23,10 +23,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Optional;
 
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
@@ -359,14 +357,58 @@ public class FormPane extends BorderPane {
 
 private GridPane createMealsGrid() {
     GridPane gridPane = new GridPane();
+    // Load data for the current day from the database
+    ObservableList<MealItem> mealsForCurrentDay = loadMealsForCurrentDay();
 
-    gridPane.add(mealTable, 0, 0);
+    // Set up the TableView
+    mealTable.setItems(mealsForCurrentDay);
+
     totalMacroChart.setTitle("Total Macro Distribution");
 
     // Add components to the GridPane
+    gridPane.add(mealTable, 0, 0);
     gridPane.add(totalMacroChart, 2, 0, 2, 6);
+
     return gridPane;
 }
+    private ObservableList<MealItem> loadMealsForCurrentDay() {
+        ObservableList<MealItem> meals = FXCollections.observableArrayList();
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
+                        "?serverTimezone=UTC",
+                DB_USER,
+                DB_PASS)) {
+
+            String selectQuery = "SELECT * FROM " + DBConst.TABLE_MEAL +
+                    " WHERE DATE(" + DBConst.MEAL_COLUMN_TIMESTAMP + ") = CURDATE()";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    String foodName = resultSet.getString(DBConst.MEAL_COLUMN_NAME);
+                    double calories = resultSet.getDouble(DBConst.MEAL_COLUMN_CALORIES);
+                    double protein = resultSet.getDouble(DBConst.MEAL_COLUMN_PROTEIN);
+                    double fat = resultSet.getDouble(DBConst.MEAL_COLUMN_FAT);
+                    double carbs = resultSet.getDouble(DBConst.MEAL_COLUMN_CARBS);
+
+                    // Create a new MealItem
+                    MealItem mealItem = new MealItem(foodName, calories, protein, fat, carbs);
+
+                    // Add the MealItem to the list
+                    meals.add(mealItem);
+                }
+
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return meals;
+    }
 
     private TableView<MealItem> createMealTable() {
         TableView<MealItem> table = new TableView<>();
@@ -376,8 +418,7 @@ private GridPane createMealsGrid() {
         TableColumn<MealItem, Double> proteinColumn = new TableColumn<>("Protein");
         TableColumn<MealItem, Double> fatColumn = new TableColumn<>("Fat");
         TableColumn<MealItem, Double> carbsColumn = new TableColumn<>("Carbs");
-
-        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn);
+        TableColumn<MealItem, Void> actionColumn = new TableColumn<>("Actions");
 
         // Set cell value factories
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("foodName"));
@@ -386,7 +427,97 @@ private GridPane createMealsGrid() {
         fatColumn.setCellValueFactory(new PropertyValueFactory<>("fat"));
         carbsColumn.setCellValueFactory(new PropertyValueFactory<>("carbs"));
 
+        // Create a cell factory for the action column
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button updateButton = new Button("Update");
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                // Set actions for the buttons
+                updateButton.setOnAction(event -> {
+                    MealItem mealItem = getTableView().getItems().get(getIndex());
+                    // Call a method to handle the update logic
+                    updateMealItem(mealItem);
+
+
+
+                });
+
+                deleteButton.setOnAction(event -> {
+                    MealItem mealItem = getTableView().getItems().get(getIndex());
+                    // Call a method to handle the delete logic
+                    deleteMealItem(mealItem);
+
+                   deleteTotalMacros(mealItem);
+
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox buttons = new HBox(updateButton, deleteButton);
+                    buttons.setSpacing(5);
+                    setGraphic(buttons);
+                }
+            }
+        });
+
+        table.getColumns().addAll(nameColumn, caloriesColumn, proteinColumn, fatColumn, carbsColumn, actionColumn);
+
         return table;
+    }
+
+    private void updateMealItem(MealItem mealItem) {
+
+    }
+
+    private void deleteMealItem(MealItem mealItem) {
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Delete Confirmation");
+        confirmationDialog.setHeaderText(null);
+        confirmationDialog.setContentText("Are you sure you want to delete this item?");
+
+        Optional<ButtonType> result = confirmationDialog.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // User confirmed deletion
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + DB_NAME +
+                            "?serverTimezone=UTC",
+                    DB_USER,
+                    DB_PASS);) {
+
+                String deleteQuery = "DELETE FROM " + DBConst.TABLE_MEAL + " WHERE " +
+                        DBConst.MEAL_COLUMN_NAME + " = ? AND " +
+                        DBConst.MEAL_COLUMN_CALORIES + " = ? AND " +
+                        DBConst.MEAL_COLUMN_PROTEIN + " = ? AND " +
+                        DBConst.MEAL_COLUMN_FAT + " = ? AND " +
+                        DBConst.MEAL_COLUMN_CARBS + " = ?";
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+                    // Set values for the parameters
+                    preparedStatement.setString(1, mealItem.getFoodName());
+                    preparedStatement.setDouble(2, mealItem.getCalories());
+                    preparedStatement.setDouble(3, mealItem.getProtein());
+                    preparedStatement.setDouble(4, mealItem.getFat());
+                    preparedStatement.setDouble(5, mealItem.getCarbs());
+
+                    // Execute the query
+                    preparedStatement.executeUpdate();
+
+                    // Remove the item from the table
+                    mealTable.getItems().remove(mealItem);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
 
@@ -411,6 +542,26 @@ private GridPane createMealsGrid() {
         tcarbs += Double.parseDouble(carbsTextField.getText());
 
         totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
+        totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
+        totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
+    }
+    private void deleteTotalMacros(MealItem meals) {
+
+
+        tprotein -= meals.getProtein();
+        tfat -= meals.getFat();
+        tcarbs -= meals.getCarbs();
+
+//        totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().remove(new PieChart.Data("Protein", meals.getProtein()));
+        totalMacroChart.getData().remove(new PieChart.Data("Fat", meals.getFat()));
+        totalMacroChart.getData().remove(new PieChart.Data("Carbs", meals.getCarbs()));
+
+        totalMacroChart.getData().clear(); // Clear existing data
+
 
         totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
         totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
