@@ -414,12 +414,18 @@ private GridPane createMealsGrid() {
                     MealItem mealItem = getTableView().getItems().get(getIndex());
                     // Call a method to handle the update logic
                     updateMealItem(mealItem);
+
+
+
                 });
 
                 deleteButton.setOnAction(event -> {
                     MealItem mealItem = getTableView().getItems().get(getIndex());
                     // Call a method to handle the delete logic
                     deleteMealItem(mealItem);
+
+                   deleteTotalMacros(mealItem);
+
                 });
             }
 
@@ -522,6 +528,26 @@ private GridPane createMealsGrid() {
         tcarbs += Double.parseDouble(carbsTextField.getText());
 
         totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
+        totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
+        totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
+    }
+    private void deleteTotalMacros(MealItem meals) {
+
+
+        tprotein -= meals.getProtein();
+        tfat -= meals.getFat();
+        tcarbs -= meals.getCarbs();
+
+//        totalMacroChart.getData().clear(); // Clear existing data
+
+        totalMacroChart.getData().remove(new PieChart.Data("Protein", meals.getProtein()));
+        totalMacroChart.getData().remove(new PieChart.Data("Fat", meals.getFat()));
+        totalMacroChart.getData().remove(new PieChart.Data("Carbs", meals.getCarbs()));
+
+        totalMacroChart.getData().clear(); // Clear existing data
+
 
         totalMacroChart.getData().add(new PieChart.Data("Protein", tprotein));
         totalMacroChart.getData().add(new PieChart.Data("Fat", tfat));
