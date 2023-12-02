@@ -1,18 +1,19 @@
 package com.example.itrack.math;
 
 public class CalCalc {
-    private int weight;
-    private int height;
+    private double weight;
+    private double height;
+
     private int age;
     private double tdee;
     private int totalCal;
 
-    public CalCalc(int age, String gender, int height, int weight, int goalWeight, String activityLevel) {
+    public CalCalc(int age, String gender, double height, double weight, double goalWeight, String activityLevel) {
         this.age = age;
         this.height = height;
         this.weight = weight;
         this.tdee = calculateTDEE(gender, activityLevel);
-        this.totalCal = calculateTotalCal(goalWeight);
+        this.totalCal = calculateTotalCal((int) goalWeight);
     }
 
     private double calculateBMR(String gender) {
@@ -42,7 +43,7 @@ public class CalCalc {
         }
     }
 
-    private int calculateTotalCal(int goalWeight) {
+    private int calculateTotalCal(double goalWeight) {
             if (weight > goalWeight) {
                 return (int) (tdee - 500);
             } else if (weight < goalWeight) {
@@ -53,30 +54,6 @@ public class CalCalc {
     }
 
     // Getters and other methods...
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public double getTdee() {
         return tdee;
