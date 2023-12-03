@@ -1,2 +1,2 @@
-lbs
-Feet
+kg
+Centimeters

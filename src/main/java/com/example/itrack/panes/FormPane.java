@@ -38,7 +38,8 @@ public class FormPane extends BorderPane {
     private TextField carbsTextField;
     private Text error;
     private double bmiCalculator;
-    private CalCalc calCalc;
+    private String[] info = readPersonInfo();
+    private CalCalc calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Double.parseDouble(info[3]), Double.parseDouble(info[4]),Double.parseDouble(info[5]), info[6]);;
 
     private  double personHeight;
     private int personWeight;
@@ -49,9 +50,20 @@ public class FormPane extends BorderPane {
     TableView<MealItem> mealTable = createMealTable();
 
 //dubles for total macros
+
+    private double tCals = 0;
     private double tprotein = 0;
     private double tfat = 0;
     private double tcarbs = 0;
+    private double setCals = calCalc.getTotalCal();
+    private double setPro = recProteinAmount();
+    private double setFat = recFatAmount();
+    private double setCarbs = recCarbAmount();
+
+    Text calsRemaining;
+    Text proteinRemaining;
+    Text fatRemaining;
+    Text carbsRemaining;
 
 
     public FormPane()  {
@@ -116,7 +128,7 @@ public class FormPane extends BorderPane {
         //PersonTable personTable = new PersonTable();
         Tab personTab = new Tab("Personal Info");
 
-        String[] info = readPersonInfo();
+
         Text nameLabel = new Text("Name: " + info[0]);
         Text ageLabel = new Text("Age: " + info[1]);
         Text genderLabel = new Text("Gender: " + info[2]);
@@ -173,7 +185,7 @@ public class FormPane extends BorderPane {
         }
 
         //cal intake calc
-        calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Double.parseDouble(info[3]), Double.parseDouble(info[4]),Double.parseDouble(info[5]), info[6]);
+
         String totalCals = String.valueOf(calCalc.getTotalCal());
         Text calIntake =new Text("Calories Needed: " + totalCals);
 
@@ -211,58 +223,8 @@ public class FormPane extends BorderPane {
             }
         });
 
-        // Weekly tab
-        Tab weeklyTab = new Tab("Weekly Report");
-
-        int weeklyCals = calCalc.getTotalCal() * 7;
-        int weekProtein = recProteinAmount() * 7;
-        int weekCarbs = recCarbAmount() * 7;
-        int weekFat = recFatAmount() * 7;
-
-
-        int consumedCals = intakeCalories();
-        int proteinNeeded = recProteinAmount();
-        int fatsNeeded = recFatAmount();
-        int carbsNeeded = recCarbAmount();
-
-        int carbsConsumed = carbsIntake();
-        int proteinConsumed = proteinIntake();
-        int fatConsumed = fatIntake();
-
-        //subtracts macros from consumed meals
-        int fatRemaining = fatsNeeded - fatConsumed;
-        int proteinRemaining = proteinNeeded - proteinConsumed;
-        int carbsRemaining = carbsNeeded - carbsConsumed;
-
-        BorderPane weeklyPane = new BorderPane();
-        //insert text
-        Label weeklyTitle = new Label("Weekly Numbers:");
-        weeklyTitle.setFont(titleFont);
-        Label weeklyCalsLabel = new Label("Weekly Calories: " + weeklyCals);
-        weeklyCalsLabel.setFont(textFont);
-        Label weeklyProtein = new Label("Weekly Protein: " + weekProtein);
-        weeklyProtein.setFont(textFont);
-        Label weeklyFat = new Label("Weekly Fat: " + weekFat);
-        weeklyFat.setFont(textFont);
-        Label weeklyCarbs = new Label("Weekly Carbs: " + weekCarbs);
-        weeklyCarbs.setFont(textFont);
-
-        VBox weeklyNumsVBox = new VBox();
-        weeklyNumsVBox.setAlignment(Pos.TOP_LEFT);
-        weeklyNumsVBox.getChildren().addAll(weeklyTitle, weeklyCalsLabel, weeklyCarbs, weeklyProtein, weeklyFat);
-        weeklyPane.setLeft(weeklyNumsVBox);
-
-        weeklyTab.setContent(weeklyPane);
-//
-//
-//
-//        System.out.println("Calories: " + weeklyCals + "\nProtein: " + proteinNeeded + "\nFats: " + fatsNeed + "\nCarbs: " + carbsNeed);
-//        System.out.println("Protein Intake: " + proteinConsumed + "\nFats Consumed: " + fatConsumed + "\nCarbs Consumed: "
-//        + carbsConsumed + "\n Fats left: " + leftFat);
-//        System.out.println(consumedCals);
-
         // Create a TabPane
-        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab, weeklyTab);
+        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab);
 
         // Add the TabPane to the bottom of the BorderPane
 
@@ -293,6 +255,7 @@ public class FormPane extends BorderPane {
 
         // Create a button for adding the food to the database
         Button addButton = new Button("Add Food");
+        addButton.setId("myButton");
         addButton.setOnAction(e->{
             insertFoodIntoMeals();
 
@@ -619,10 +582,18 @@ private GridPane createMealsGrid() {
 
     private void updateTotalMacros() {
 //        double calories = Double.parseDouble(caloriesTextField.getText());
-
+        tCals += Double.parseDouble(caloriesTextField.getText());
         tprotein += Double.parseDouble(proteinTextField.getText());
         tfat += Double.parseDouble(fatTextField.getText());
         tcarbs += Double.parseDouble(carbsTextField.getText());
+        setCals -= tCals;
+        setPro -= tprotein;
+        setFat -= tfat;
+        setCarbs -= tcarbs;
+        calsRemaining.setText(("Calories Remaining: " + (setCals)));
+        proteinRemaining.setText(("Protein Remaining: " + (setPro)));
+        fatRemaining.setText(("Fats Remaining: " + (setFat)));
+        carbsRemaining.setText(("Carbohydrates Remaining: " + (setCarbs)));
 
         totalMacroChart.getData().clear(); // Clear existing data
 
@@ -631,8 +602,16 @@ private GridPane createMealsGrid() {
         totalMacroChart.getData().add(new PieChart.Data("Carbs", tcarbs));
     }
     private void deleteTotalMacros(MealItem meals) {
+        setCals += tCals;
+        setPro += tprotein;
+        setFat += tfat;
+        setCarbs += tcarbs;
+        calsRemaining.setText(("Calories Remaining: " + (setCals)));
+        proteinRemaining.setText(("Protein Remaining: " + (setPro)));
+        fatRemaining.setText(("Fats Remaining: " + (setFat)));
+        carbsRemaining.setText(("Carbohydrates Remaining: " + (setCarbs)));
 
-
+        tCals -= meals.getCalories();
         tprotein -= meals.getProtein();
         tfat -= meals.getFat();
         tcarbs -= meals.getCarbs();
@@ -697,10 +676,7 @@ private GridPane createMealsGrid() {
         }
     }
 
-    private void updateDailyMacrosTracker(){
-        BorderPane dailyMacrosPane = dailyMacrosTracker();
-        setLeft(dailyMacrosPane.getLeft());
-    }
+
 
     private BorderPane dailyMacrosTracker(){
         BorderPane root = new BorderPane();
@@ -708,10 +684,10 @@ private GridPane createMealsGrid() {
 
         calCalc = new CalCalc(Integer.parseInt(info[1]),info[2], Double.parseDouble(info[3]), Double.parseDouble(info[4]),Double.parseDouble(info[5]), info[6]);
 
-        Text calsRemaining = new Text("Calories Remaining: " + calCalc.getTotalCal() );
-        Text proteinRemaining = new Text("Protein Remaining: " + (recProteinAmount() - proteinIntake()));
-        Text fatRemaining = new Text("Fats Remaining: " + (recFatAmount() - fatIntake()));
-        Text carbsRemaining = new Text("Carbohydrates Remaining: " + (recCarbAmount() - carbsIntake()));
+        calsRemaining = new Text("Calories Remaining: " + (calCalc.getTotalCal() - tCals) );
+        proteinRemaining = new Text("Protein Remaining: " + (recProteinAmount() - tprotein));
+        fatRemaining = new Text("Fats Remaining: " + (recFatAmount() - tfat));
+        carbsRemaining = new Text("Carbohydrates Remaining: " + (recCarbAmount() - tcarbs));
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(calsRemaining, carbsRemaining, proteinRemaining, fatRemaining);
