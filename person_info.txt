@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Ali 
 22
 Male
@@ -5,3 +6,12 @@ Male
 62
 90
 Moderately active (moderate exercise/sports 3-5 days/week)
+=======
+ali
+22
+Male
+5.06
+160
+200
+Lightly active (light exercise/sports 1-3 days/week)
+>>>>>>> 9ab8c1ddd991028d0970313a3eead98114e6300c

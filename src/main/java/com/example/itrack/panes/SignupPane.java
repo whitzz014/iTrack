@@ -3,6 +3,7 @@ package com.example.itrack.panes;
 import com.example.itrack.MainApplication;
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.SignupScene;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -135,6 +136,7 @@ public class SignupPane extends BorderPane {
         //Button
         Button signupButton = new Button("Enter");
         File file = new File("person_info.txt");
+
 
         signupButton.setOnAction(e-> {
             try {
