@@ -2,7 +2,12 @@ package com.example.itrack.database;
 
 import javafx.scene.chart.XYChart;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
+import java.util.jar.JarEntry;
 
 import static com.example.itrack.database.Const.*;
 
@@ -15,15 +20,28 @@ public class Database {
     private static Database instance;
     //make Connection
     private Connection connection = null;
+    private  String[] dbLogin = new String[4];
 
-    private Database() {
+    private Database()  {
+        try(BufferedReader br = new BufferedReader(new FileReader("db_login.txt"))){
+            dbLogin[0] = br.readLine().trim(); // host
+            dbLogin[1] = br.readLine().trim(); // user
+            dbLogin[2] = br.readLine().trim(); // pass
+            dbLogin[3] = br.readLine().trim(); // name
+        }catch(IOException ioException){
+            ioException.printStackTrace();
+        }
+
+        System.out.println(dbLogin[0] + "\n" + dbLogin[1]+ "\n" + dbLogin[2]+ "\n" + dbLogin[3]);
+
+
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost/"+ DB_NAME +
+                    .getConnection("jdbc:mysql://localhost/"+ dbLogin[3] +
                                     "?serverTimezone=UTC",
-                            DB_USER,
-                            DB_PASS);
+                            dbLogin[1],
+                            dbLogin[2]);
             System.out.println("Created Connection!");
 
             createTables(DBConst.TABLE_PERSON_INFO, DBConst.CREATE_TABLE_PERSON_INFO, connection);
@@ -48,7 +66,7 @@ public class Database {
         Statement createTable;
         DatabaseMetaData it = connection.getMetaData();
 
-        ResultSet resultSet = it.getTables("bwhitsonprojects", null, tableName, null);
+        ResultSet resultSet = it.getTables(dbLogin[1]+"projects", null, tableName, null);
 
         if(resultSet.next()){
             System.out.println(tableName + "table already exists");

@@ -752,13 +752,13 @@ private GridPane createMealsGrid() {
      }
 
      private int recProteinAmount(){
-         return (int) ((0.25 * calCalc.getTdee())/4);
+         return (int) ((0.3 * calCalc.getTdee())/4);
      }
      private int recCarbAmount() {
          return (int) ((0.50 * calCalc.getTdee()) / 4);
      }
      private int recFatAmount(){
-            return (int) ((0.25 * calCalc.getTdee()) / 9);
+            return (int) ((0.20 * calCalc.getTdee()) / 9);
          }
      }
 
