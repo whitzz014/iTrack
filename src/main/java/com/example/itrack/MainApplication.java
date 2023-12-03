@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainApplication extends Application {
 
@@ -84,7 +85,10 @@ public class MainApplication extends Application {
  * if it is empty it displays a pop window for the user to input info
  * when the signup button is clicked the users info is inputted to `person_info.txt`
  * If user is already filled out it is sends the user to tracker tab and displays all the info
- */
+// */
+
+//cvcqqcvcqqxd66mxd66m
+
         Scene scene;
         if (dbFile.length() == 0){
             scene = new DBLoginScene();
@@ -92,9 +96,9 @@ public class MainApplication extends Application {
             scene = new SignupScene();
         }else {
             scene = new FormScene();
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         }
 
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
     //connect stage to mainStage
       mainStage = stage;
