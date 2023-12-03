@@ -327,6 +327,21 @@ public class FormPane extends BorderPane {
         gridPane.add(carbsTextField, 1, 4);
         gridPane.add(addButton, 1, 5);
 
+        // Apply styles to nodes
+        foodLabel.getStyleClass().add("text-label");
+        caloriesLabel.getStyleClass().add("text-label");
+        proteinLabel.getStyleClass().add("text-label");
+        fatLabel.getStyleClass().add("text-label");
+        carbsLabel.getStyleClass().add("text-label");
+
+        foodComboBox.getStyleClass().add("text-field");
+        caloriesTextField.getStyleClass().add("text-field");
+        proteinTextField.getStyleClass().add("text-field");
+        fatTextField.getStyleClass().add("text-field");
+        carbsTextField.getStyleClass().add("text-field");
+
+        addButton.getStyleClass().add("add-button");
+
         //make pi chart
 //        Text hello = new Text("hello world");
 //        gridPane.add(hello, 0, 6);
@@ -454,7 +469,12 @@ private GridPane createMealsGrid() {
     GridPane gridPane = new GridPane();
     // Load data for the current day from the database
     ObservableList<MealItem> mealsForCurrentDay = loadMealsForCurrentDay();
+    mealTable.getStyleClass().add("table-view");
 
+// Apply CSS styles to each TableColumn
+    for (TableColumn<MealItem, ?> column : mealTable.getColumns()) {
+        column.getStyleClass().add("table-column");
+    }
     // Set up the TableView
     mealTable.setItems(mealsForCurrentDay);
 
