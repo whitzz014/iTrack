@@ -1,6 +1,11 @@
 package com.example.itrack.panes;
 
+import com.example.itrack.MainApplication;
+import com.example.itrack.scenes.DBLoginScene;
+import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.SignupScene;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,6 +20,8 @@ import java.net.URI;
 import java.net.URL;
 
 public class DBLoginPane extends BorderPane {
+
+    private final File personFile = new File("person_info.txt");
     /**
      * Creates a BorderPane layout.
      */
@@ -57,6 +64,15 @@ public class DBLoginPane extends BorderPane {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+
+           Scene scene;
+            if (personFile.length() == 0){
+                scene = new SignupScene();
+            }else{
+                scene = new FormScene();
+            }
+
+            MainApplication.mainStage.setScene(scene);
         });
 
         loginInput.getChildren().addAll(hostBox, userBox, passBox, nameBox, signin);

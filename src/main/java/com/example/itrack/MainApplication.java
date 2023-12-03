@@ -75,7 +75,7 @@ public class MainApplication extends Application {
         fileMenu.getItems().addAll(accountMenu, settingsMenu, signup,exit);
         menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
 
-        Database.getInstance();
+
 
         File personFile = new File("person_info.txt");
         File dbFile = new File("db_login.txt");
@@ -93,6 +93,7 @@ public class MainApplication extends Application {
         }else {
             scene = new FormScene();
         }
+
 
     //connect stage to mainStage
       mainStage = stage;
