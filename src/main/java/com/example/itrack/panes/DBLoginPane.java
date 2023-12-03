@@ -28,8 +28,8 @@ public class DBLoginPane extends BorderPane {
 
     public DBLoginPane() {
         File dbFile = new File("db_login.txt");
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
 
-       ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
         setAlignment(logo, Pos.CENTER);
 
         VBox loginInput = new VBox();

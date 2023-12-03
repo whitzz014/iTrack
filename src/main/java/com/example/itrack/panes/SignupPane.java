@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,6 +26,8 @@ public class SignupPane extends BorderPane {
 
     public SignupPane() {
         this.setTop(menu);
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
+
         //Fonts
         Font textFont = Font.font("Trebuchet MS", 14);
         Font titleFont = Font.font("Trebuchet MS", 18);
@@ -169,7 +173,7 @@ public class SignupPane extends BorderPane {
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
+        signUpBox.getChildren().addAll(logo,title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
 
         this.setCenter(signUpBox);
 
