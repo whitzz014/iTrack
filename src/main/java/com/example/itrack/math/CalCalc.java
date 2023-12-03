@@ -8,6 +8,8 @@ public class CalCalc {
     private double tdee;
     private int totalCal;
 
+
+
     public CalCalc(int age, String gender, double height, double weight, double goalWeight, String activityLevel) {
         this.age = age;
         this.height = height;

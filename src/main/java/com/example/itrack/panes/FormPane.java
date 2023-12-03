@@ -223,59 +223,8 @@ public class FormPane extends BorderPane {
             }
         });
 
-        // Weekly tab
-        Tab weeklyTab = new Tab("Weekly Report");
-        weeklyTab.setClosable(false);
-
-        int weeklyCals = calCalc.getTotalCal() * 7;
-        int weekProtein = recProteinAmount() * 7;
-        int weekCarbs = recCarbAmount() * 7;
-        int weekFat = recFatAmount() * 7;
-
-
-        int consumedCals = intakeCalories();
-        int proteinNeeded = recProteinAmount();
-        int fatsNeeded = recFatAmount();
-        int carbsNeeded = recCarbAmount();
-
-        int carbsConsumed = carbsIntake();
-        int proteinConsumed = proteinIntake();
-        int fatConsumed = fatIntake();
-
-        //subtracts macros from consumed meals
-        int fatRemaining = fatsNeeded - fatConsumed;
-        int proteinRemaining = proteinNeeded - proteinConsumed;
-        int carbsRemaining = carbsNeeded - carbsConsumed;
-
-        BorderPane weeklyPane = new BorderPane();
-        //insert text
-        Label weeklyTitle = new Label("Weekly Numbers:");
-        weeklyTitle.setFont(titleFont);
-        Label weeklyCalsLabel = new Label("Weekly Calories: " + weeklyCals);
-        weeklyCalsLabel.setFont(textFont);
-        Label weeklyProtein = new Label("Weekly Protein: " + weekProtein);
-        weeklyProtein.setFont(textFont);
-        Label weeklyFat = new Label("Weekly Fat: " + weekFat);
-        weeklyFat.setFont(textFont);
-        Label weeklyCarbs = new Label("Weekly Carbs: " + weekCarbs);
-        weeklyCarbs.setFont(textFont);
-
-        VBox weeklyNumsVBox = new VBox();
-        weeklyNumsVBox.setAlignment(Pos.TOP_LEFT);
-        weeklyNumsVBox.getChildren().addAll(weeklyTitle, weeklyCalsLabel, weeklyCarbs, weeklyProtein, weeklyFat);
-        weeklyPane.setLeft(weeklyNumsVBox);
-
-        weeklyTab.setContent(weeklyPane);
-//
-//
-//
-//        System.out.println("Calories: " + weeklyCals + "\nProtein: " + proteinNeeded + "\nFats: " + fatsNeed + "\nCarbs: " + carbsNeed);
-//        System.out.println("Protein Intake: " + proteinConsumed + "\nFats Consumed: " + fatConsumed + "\nCarbs Consumed: "
-//        + carbsConsumed + "\n Fats left: " + leftFat);
-//        System.out.println(consumedCals);
-
         // Create a TabPane
-        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab, weeklyTab);
+        tabPane.getTabs().addAll(personTab, addItemTab,mealsTab);
 
         // Add the TabPane to the bottom of the BorderPane
 
@@ -799,13 +748,13 @@ private GridPane createMealsGrid() {
      }
 
      private int recProteinAmount(){
-         return (int) ((0.25 * calCalc.getTdee())/4);
+         return (int) ((0.3 * calCalc.getTdee())/4);
      }
      private int recCarbAmount() {
          return (int) ((0.50 * calCalc.getTdee()) / 4);
      }
      private int recFatAmount(){
-            return (int) ((0.25 * calCalc.getTdee()) / 9);
+            return (int) ((0.20 * calCalc.getTdee()) / 9);
          }
      }
 

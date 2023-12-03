@@ -10,10 +10,7 @@ import com.example.itrack.Constants.ScreenRatio;
 
 import com.example.itrack.database.Database;
 
-import com.example.itrack.scenes.AccountScene;
-import com.example.itrack.scenes.FormScene;
-import com.example.itrack.scenes.SettingsScene;
-import com.example.itrack.scenes.SignupScene;
+import com.example.itrack.scenes.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -77,12 +74,11 @@ public class MainApplication extends Application {
         creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
         fileMenu.getItems().addAll(accountMenu, settingsMenu, signup,exit);
         menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
-        //Mayo De Noche purfavor
 
-        Database.getInstance();
 
-        File file = new File("person_info.txt");
 
+        File personFile = new File("person_info.txt");
+        File dbFile = new File("db_login.txt");
 /**
  * checks to see if file is empty
  * if it is empty it displays a pop window for the user to input info
@@ -90,7 +86,9 @@ public class MainApplication extends Application {
  * If user is already filled out it is sends the user to tracker tab and displays all the info
  */
         Scene scene;
-        if (file.length() == 0){
+        if (dbFile.length() == 0){
+            scene = new DBLoginScene();
+        } else if (personFile.length() == 0){
             scene = new SignupScene();
         }else {
             scene = new FormScene();
