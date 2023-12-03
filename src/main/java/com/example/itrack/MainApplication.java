@@ -32,39 +32,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Menu fileMenu = new Menu("File");
-
-        //account option
-        MenuItem accountMenu = new MenuItem("Account");
-        //TODO-> sends to account info pane
-            accountMenu.setOnAction(e->{
-                MainApplication.mainStage.setScene(new AccountScene());
-            });
-        //settings option
-        MenuItem settingsMenu = new MenuItem("Settings");
-        //send to settings pane
-        settingsMenu.setOnAction(e->{
-            MainApplication.mainStage.setScene(new SettingsScene());
-        });
-        //exit app button
-        MenuItem exit = new MenuItem("Close Application");
-        exit.setOnAction(e->{
-            System.exit(0);
-        });
-
-        MenuItem signup = new MenuItem("SIGNUP");
-        signup.setOnAction(event -> {
-            mainStage.setScene(new SignupScene());
-        });
-
-        //Tracker Menu Item
-        Menu navMenu = new Menu("iNavigation");
-        MenuItem formItem = new MenuItem("Tracker");
-        formItem.setOnAction(e->{
-            MainApplication.mainStage.setScene(new FormScene());
-        });
-
-        navMenu.getItems().addAll(formItem);
 
         //credits
         Menu creditsMenu = new Menu("Credits");
@@ -73,8 +40,7 @@ public class MainApplication extends Application {
         MenuItem founderTwo = new MenuItem("Brock Whitson");
 
         creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
-        fileMenu.getItems().addAll(accountMenu, settingsMenu, signup,exit);
-        menu.getMenus().addAll(fileMenu, navMenu, creditsMenu);
+        menu.getMenus().addAll( creditsMenu);
 
 
 
