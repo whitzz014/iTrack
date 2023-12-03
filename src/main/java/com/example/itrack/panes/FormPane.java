@@ -225,6 +225,7 @@ public class FormPane extends BorderPane {
 
         // Weekly tab
         Tab weeklyTab = new Tab("Weekly Report");
+        weeklyTab.setClosable(false);
 
         int weeklyCals = calCalc.getTotalCal() * 7;
         int weekProtein = recProteinAmount() * 7;
@@ -305,6 +306,7 @@ public class FormPane extends BorderPane {
 
         // Create a button for adding the food to the database
         Button addButton = new Button("Add Food");
+        addButton.setId("myButton");
         addButton.setOnAction(e->{
             insertFoodIntoMeals();
 

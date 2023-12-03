@@ -96,6 +96,8 @@ public class MainApplication extends Application {
             scene = new FormScene();
         }
 
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
     //connect stage to mainStage
       mainStage = stage;
       //so user cant adjust application size
