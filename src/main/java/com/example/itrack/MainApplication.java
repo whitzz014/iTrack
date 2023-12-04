@@ -61,7 +61,7 @@ public class MainApplication extends Application {
         if (dbFile.length() == 0){
             scene = new DBLoginScene();
 
-        } else if (personFile.length() == 0){
+        }else if (personFile.length() == 0){
             scene = new SignupScene();
         }else {
             scene = new FormScene();
