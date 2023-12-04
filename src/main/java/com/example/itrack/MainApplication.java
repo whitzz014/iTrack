@@ -6,10 +6,6 @@
 package com.example.itrack;
 
 
-import com.example.itrack.Constants.ScreenRatio;
-
-import com.example.itrack.database.Database;
-
 import com.example.itrack.scenes.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,17 +26,23 @@ public class MainApplication extends Application {
 
     public static Stage mainStage;
 
+    public static Scene scene;
+
     @Override
     public void start(Stage stage) throws IOException {
+
 
         //credits
         Menu creditsMenu = new Menu("Credits");
         MenuItem ideUsed = new MenuItem("IDE: IntelliJ");
+        MenuItem illustrator = new MenuItem("Adobe Illustrator");
         MenuItem founderOne = new MenuItem("Ali Mehdi");
         MenuItem founderTwo = new MenuItem("Brock Whitson");
 
+
         creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
         menu.getMenus().addAll( creditsMenu);
+
 
 
 
@@ -55,23 +57,22 @@ public class MainApplication extends Application {
 
 //cvcqqcvcqqxd66mxd66m
 
-        Scene scene;
+
         if (dbFile.length() == 0){
             scene = new DBLoginScene();
+
         } else if (personFile.length() == 0){
             scene = new SignupScene();
         }else {
             scene = new FormScene();
-            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         }
-
 
     //connect stage to mainStage
       mainStage = stage;
       //so user cant adjust application size
       mainStage.setResizable(false);
       mainStage.setTitle("iTrack");
-      //connect FormScene so it is the main scene
+        //connect FormScene so it is the main scene
       mainStage.setScene(scene);
       mainStage.show();
     }

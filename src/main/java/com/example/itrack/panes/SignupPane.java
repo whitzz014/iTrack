@@ -3,10 +3,14 @@ package com.example.itrack.panes;
 import com.example.itrack.MainApplication;
 import com.example.itrack.database.DBConst;
 import com.example.itrack.scenes.FormScene;
+import com.example.itrack.scenes.SignupScene;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +20,7 @@ import javafx.scene.text.Text;
 import java.io.*;
 import java.sql.*;
 
+import static com.example.itrack.MainApplication.mainStage;
 import static com.example.itrack.MainApplication.menu;
 import static com.example.itrack.database.Const.*;
 
@@ -23,6 +28,8 @@ public class SignupPane extends BorderPane {
 
     public SignupPane() {
         this.setTop(menu);
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
+
         //Fonts
         Font textFont = Font.font("Trebuchet MS", 14);
         Font titleFont = Font.font("Trebuchet MS", 18);
@@ -136,6 +143,7 @@ public class SignupPane extends BorderPane {
         Button signupButton = new Button("Enter");
         File file = new File("person_info.txt");
 
+
         signupButton.setOnAction(e-> {
             try {
                 PrintWriter signup = new PrintWriter("person_info.txt");
@@ -159,15 +167,15 @@ public class SignupPane extends BorderPane {
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-
-
+           ;
             MainApplication.mainStage.setScene(new FormScene());
+
         });
 
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);
-        signUpBox.getChildren().addAll(title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
+        signUpBox.getChildren().addAll(logo,title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
 
         this.setCenter(signUpBox);
 

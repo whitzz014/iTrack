@@ -27,9 +27,10 @@ public class DBLoginPane extends BorderPane {
      */
 
     public DBLoginPane() {
+        BorderPane root = new BorderPane();
         File dbFile = new File("db_login.txt");
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
 
-       ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
         setAlignment(logo, Pos.CENTER);
 
         VBox loginInput = new VBox();
@@ -71,7 +72,6 @@ public class DBLoginPane extends BorderPane {
             }else{
                 scene = new FormScene();
             }
-
             MainApplication.mainStage.setScene(scene);
         });
 
@@ -79,9 +79,5 @@ public class DBLoginPane extends BorderPane {
 
         setTop(logo);
         setCenter(loginInput);
-
-
-
-
     }
 }

@@ -14,5 +14,7 @@ public class DBLoginScene extends Scene {
      */
     public DBLoginScene() {
         super(new DBLoginPane(), ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
+        this.getStylesheets().add(getClass().getResource("/com/example/itrack/styles.css").toExternalForm());
+
     }
 }

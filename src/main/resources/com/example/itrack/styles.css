@@ -10,7 +10,7 @@
     -fx-font-family: "Arial"; /* Font family */
 }
 
-.add-button {
+.add-button, .sigin-button {
     -fx-background-color: #4CAF50; /* Green background */
     -fx-border-color: #45a049; /* Dark green border */
     -fx-text-fill: white; /* White text color */
@@ -26,6 +26,7 @@
 .add-button:pressed{
     -fx-background-color: darkGreen; /* Dark green background on hover */
 }
+
 
 
 
@@ -53,4 +54,8 @@
 
 .table-row-cell:hover {
     -fx-background-color: #FFD700; /* gold background on hover */
+
+/* Button style when pressed */
+#myButton:pressed {
+    -fx-background-color: darkGreen;
 }

@@ -18,6 +18,7 @@ public class FormScene extends Scene {
      */
     public FormScene() {
         super(new FormPane(), ScreenRatio.SCREEN_WIDTH, ScreenRatio.SCREEN_HEIGHT);
+        this.getStylesheets().add(getClass().getResource("/com/example/itrack/styles.css").toExternalForm());
 
     }
 }
