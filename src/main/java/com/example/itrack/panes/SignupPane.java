@@ -172,6 +172,8 @@ public class SignupPane extends BorderPane {
 
         });
 
+        signupButton.getStyleClass().add("add-button");
+
         //VBox for info
         VBox signUpBox = new VBox();
         signUpBox.setAlignment(Pos.CENTER);

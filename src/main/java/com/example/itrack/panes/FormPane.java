@@ -68,20 +68,10 @@ public class FormPane extends BorderPane {
 
     public FormPane()  {
 
-
-
         /**
          * Records persons info into file
          * If user has already signed into the computer it will automatically go to the tracker page and display their info
          */
-       File file = new File("person_info.txt");
-
-
-        //Fonts
-        Font textFont = Font.font("Trebuchet MS", 14);
-        Font titleFont = Font.font("Trebuchet MS", 18);
-        Font errorFont = new Font("Times New Roman", 12);
-
 
         // Create a GridPane for food tracking
         GridPane gridPane = createGridPane();
@@ -189,7 +179,6 @@ public class FormPane extends BorderPane {
         Text calIntake =new Text("Calories Needed: " + totalCals);
 
 
-        Button deleteButton = new Button("DELETE");
 
         Button updateButton = new Button("UPDATE");
         updateButton.setOnAction(e->{
@@ -201,26 +190,11 @@ public class FormPane extends BorderPane {
 
             VBox vbox = new VBox();
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText, calIntake, bmiLabel,updateButton, deleteButton);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText, calIntake, bmiLabel,updateButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
 
-        deleteButton.setOnAction(e->{
-            if(file.length() == 0){
-                error = new Text("THERE IS NO INFO TO DELETE");
-                vbox.getChildren().add(error);
-            }else{
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("person_info.txt"));
-                    writer.write("");
-                    writer.close();
-                    MainApplication.mainStage.setScene(new SignupScene());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
 
         // Create a TabPane
         tabPane.getTabs().addAll(personTab, addItemTab,mealsTab);
@@ -494,19 +468,11 @@ private GridPane createMealsGrid() {
 
         // Create a cell factory for the action column
         actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
             private final Button deleteButton = new Button("Delete");
 
             {
                 // Set actions for the buttons
-                updateButton.setOnAction(event -> {
-                    MealItem mealItem = getTableView().getItems().get(getIndex());
-                    // Call a method to handle the update logic
-                    updateMealItem(mealItem);
 
-
-
-                });
 
                 deleteButton.setOnAction(event -> {
                     MealItem mealItem = getTableView().getItems().get(getIndex());
@@ -525,7 +491,7 @@ private GridPane createMealsGrid() {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    HBox buttons = new HBox(updateButton, deleteButton);
+                    HBox buttons = new HBox(deleteButton);
                     buttons.setSpacing(5);
                     setGraphic(buttons);
                 }
@@ -749,13 +715,13 @@ private GridPane createMealsGrid() {
      }
 
      private int recProteinAmount(){
-         return (int) ((0.3 * calCalc.getTdee())/4);
+         return (int) ((0.25 * calCalc.getTdee()) / 4);
      }
      private int recCarbAmount() {
          return (int) ((0.50 * calCalc.getTdee()) / 4);
      }
      private int recFatAmount(){
-            return (int) ((0.20 * calCalc.getTdee()) / 9);
+            return (int) ((0.30 * calCalc.getTdee()) / 9);
          }
      }
 

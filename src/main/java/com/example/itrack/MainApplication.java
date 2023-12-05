@@ -40,7 +40,7 @@ public class MainApplication extends Application {
         MenuItem founderTwo = new MenuItem("Brock Whitson");
 
 
-        creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed);
+        creditsMenu.getItems().addAll(founderOne,founderTwo, ideUsed, illustrator);
         menu.getMenus().addAll( creditsMenu);
 
 
@@ -60,7 +60,6 @@ public class MainApplication extends Application {
 
         if (dbFile.length() == 0){
             scene = new DBLoginScene();
-
         }else if (personFile.length() == 0){
             scene = new SignupScene();
         }else {
