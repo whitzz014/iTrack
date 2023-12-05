@@ -138,7 +138,6 @@ public class FormPane extends BorderPane {
             lbsToKg();
         }
 
-        //   System.out.println("height in cm: " + personHeight);
 
         bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
          String fitLevel = "";
@@ -324,7 +323,6 @@ public class FormPane extends BorderPane {
 
             try {
                 personHeight = Double.parseDouble(info[3]);
-                System.out.println(personHeight);
             } catch (NumberFormatException e) {
                 // Handle the case where height is not a valid double
                 System.out.println("Error: Invalid height format in person_info.txt");
@@ -334,7 +332,6 @@ public class FormPane extends BorderPane {
             // Convert weight to an integer value
             try {
                 personWeight = Integer.parseInt(info[4]);
-                System.out.println(personWeight);
             } catch (NumberFormatException e) {
                 // Handle the case where weight is not a valid integer
                 System.out.println("Error: Invalid weight format in person_info.txt");
@@ -374,7 +371,6 @@ public class FormPane extends BorderPane {
         int feetOnly = (int) personHeight;
         //takes just the inches
         double inchesPart = (personHeight - feetOnly) * 100;
-        //  System.out.println("IN: " + inchesPart);
         double heightCm = feetOnly * 30.48;
         heightCm += inchesPart * 2.54;
         personHeight = heightCm;
