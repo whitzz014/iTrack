@@ -14,6 +14,8 @@ public class DailyTab extends Tab {
         this.setText("Daily");
         GridPane root = new GridPane();
         this.setContent(root);
+        getStyleClass().add("tab");
+
     }
 
 

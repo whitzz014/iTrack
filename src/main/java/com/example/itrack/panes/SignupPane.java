@@ -186,6 +186,7 @@ private String userWeight;
         signUpBox.setAlignment(Pos.CENTER);
         signUpBox.getChildren().addAll(logo,title,nameBox,ageBox, genderBox, heightBox,weightBox,goalWeightBox,activeBox,signupButton);
 
+        getStyleClass().add("root");
         this.setCenter(signUpBox);
 
 

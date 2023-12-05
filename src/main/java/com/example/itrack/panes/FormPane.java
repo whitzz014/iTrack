@@ -117,7 +117,7 @@ public class FormPane extends BorderPane {
         BorderPane personPane = new BorderPane();
         //PersonTable personTable = new PersonTable();
         Tab personTab = new Tab("Personal Info");
-
+        personTab.getStyleClass().add("tab");
 
         Text nameLabel = createStyledText("Name: " + info[0]);
         Text ageLabel = createStyledText("Age: " + info[1]);
