@@ -84,7 +84,7 @@ public class DBLoginPane extends BorderPane {
         passBox.setAlignment(Pos.CENTER); // Center the HBox
         passBox.getChildren().addAll(dbPass, password);
 
-        Text dbName = new Text("Db Name: ");
+        Text dbName = new Text("DB Name: ");
         dbName.setWrappingWidth(labelWidth);
         TextField name = createTextFieldWithMinWidth();
         HBox nameBox = new HBox();
