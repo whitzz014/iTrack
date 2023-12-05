@@ -32,8 +32,6 @@ public class Database {
             ioException.printStackTrace();
         }
 
-        System.out.println(dbLogin[0] + "\n" + dbLogin[1]+ "\n" + dbLogin[2]+ "\n" + dbLogin[3]);
-
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -61,19 +59,38 @@ public class Database {
         return connection;
     }
 
-    private void createTables(String tableName, String tableQuery, Connection connection )
-            throws SQLException{
-        Statement createTable;
-        DatabaseMetaData it = connection.getMetaData();
+    private void createTables(String tableName, String tableQuery, Connection connection) {
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, tableName, null);
 
-        ResultSet resultSet = it.getTables(dbLogin[1]+"projects", null, tableName, null);
+            if (resultSet.next()) {
+                System.out.println(tableName + " table already exists");
+            } else {
+                try (Statement createTable = connection.createStatement()) {
+                    createTable.execute(tableQuery);
+                    System.out.println("The " + tableName + " table has been created");
+                }
+            }
+        } catch (SQLException e) {
+            // Log the exception using a logging framework like SLF4J or java.util.logging
+            e.printStackTrace();
+        }
+    }
 
-        if(resultSet.next()){
-            System.out.println(tableName + "table already exists");
-        }else{
-            createTable = connection.createStatement();
-            createTable.execute(tableQuery);
-            System.out.println("The " + tableName + " table has been created");
+    public void loadCredentialsFromFile(String filePath) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String host = reader.readLine();
+            String username = reader.readLine();
+            String password = reader.readLine();
+            String dbName = reader.readLine();
+
+            // Use the credentials to establish a connection (replace this with your actual connection logic)
+            this.connection = DriverManager.getConnection(
+                    "jdbc:mysql://" + host + "/" + dbName, username, password
+            );
+        } catch (SQLException e) {
+            e.printStackTrace(); // handle the exception appropriately
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.itrack.panes;
 
 import com.example.itrack.MainApplication;
+import com.example.itrack.database.Database;
 import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SignupScene;
 import javafx.animation.FadeTransition;
@@ -23,8 +24,12 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
 public class DBLoginPane extends BorderPane {
+
+    private Connection connection;
+    private Scene scene;
 
     private final File personFile = new File("person_info.txt");
 
@@ -50,7 +55,7 @@ public class DBLoginPane extends BorderPane {
         sequentialTransition.play();
 
 
-        setAlignment(logo, Pos.CENTER);
+        setAlignment(logo, Pos.BOTTOM_CENTER);
 
         VBox loginInput = new VBox(10);
         loginInput.setAlignment(Pos.CENTER); // Center the VBox
@@ -102,14 +107,31 @@ public class DBLoginPane extends BorderPane {
                 throw new RuntimeException(ex);
             }
 
-            Scene scene;
-            if (personFile.length() == 0) {
-                scene = new SignupScene();
-            } else {
-                scene = new FormScene();
+            try {
+                // Load credentials from the file and attempt to connect to the database
+                Database.getInstance().loadCredentialsFromFile("db_login.txt");
+
+                if (Database.getInstance().getConnection() != null) {
+                    if (personFile.length() == 0) {
+                        scene = new SignupScene();
+                    } else {
+                        scene = new FormScene();
+                    }
+                    MainApplication.mainStage.setScene(scene);
+                } else {
+                    Text error = new Text("Connection Failed!");
+                    loginInput.getChildren().add(error);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace(); // You may want to log the exception
+                Text error = new Text("Error during connection attempt!");
+                loginInput.getChildren().add(error);
             }
-            MainApplication.mainStage.setScene(scene);
         });
+
+
+
+        signin.getStyleClass().add("add-button");
 
         loginInput.getChildren().addAll(hostBox, userBox, passBox, nameBox, signin);
 

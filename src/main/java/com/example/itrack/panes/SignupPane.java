@@ -6,9 +6,7 @@ import com.example.itrack.scenes.FormScene;
 import com.example.itrack.scenes.SignupScene;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -26,6 +24,8 @@ import static com.example.itrack.database.Const.*;
 
 public class SignupPane extends BorderPane {
 
+private String userHeight;
+private String userWeight;
     public SignupPane() {
         this.setTop(menu);
         ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/com/example/itrack/iTrackLogo.png")));
@@ -33,7 +33,7 @@ public class SignupPane extends BorderPane {
         //Fonts
         Font textFont = Font.font("Trebuchet MS", 14);
         Font titleFont = Font.font("Trebuchet MS", 18);
-        Font errorFont = new Font("Times New Roman", 12);
+
 
         //Sign Up
         //Title
@@ -53,7 +53,6 @@ public class SignupPane extends BorderPane {
         HBox nameBox = new HBox();
         nameBox.setAlignment(Pos.CENTER);
         nameBox.getChildren().addAll(nameTitle,name);
-       // String personName = name.getText();
         //Age
         Text ageTitle = new Text("Age: ");
         ageTitle.setFont(textFont);
@@ -61,7 +60,7 @@ public class SignupPane extends BorderPane {
         TextField age = new TextField();
         age.setPromptText("21");
         age.setFont(textFont);
-     //   String personAge = age.getText();
+
         //HBox for name
         HBox ageBox = new HBox();
         ageBox.setAlignment(Pos.CENTER);
@@ -73,7 +72,6 @@ public class SignupPane extends BorderPane {
         ComboBox<String> gender = new ComboBox();
         gender.getItems().addAll("Male", "Female");
 
-       // String personGender = gender.getValue();
 
         //HBox for name
         HBox genderBox = new HBox();
@@ -84,49 +82,58 @@ public class SignupPane extends BorderPane {
         Text heightTitle = new Text("Height: ");
         heightTitle.setFont(textFont);
         TextField height = new TextField();
+        height.setPromptText("6.02");
+        RadioButton heightFeet = new RadioButton("Feet");
+        heightFeet.setSelected(true);
+        RadioButton heightCm = new RadioButton("cm");
 
-        ComboBox heightMeasurementBox = new ComboBox();
-        heightMeasurementBox.getItems().addAll("Centimeters", "Feet");
-        heightMeasurementBox.setValue("Feet");
+        // ToggleGroup for height radio buttons
+        ToggleGroup heightToggleGroup = new ToggleGroup();
+        heightFeet.setToggleGroup(heightToggleGroup);
+        heightCm.setToggleGroup(heightToggleGroup);
 
 
-        //String userHeight = height.getText();
+
+
 
         //HBox for name
         HBox heightBox = new HBox();
         heightBox.setAlignment(Pos.CENTER);
-        heightBox.getChildren().addAll(heightTitle,height,heightMeasurementBox);
+        heightBox.getChildren().addAll(heightTitle,height,heightFeet, heightCm);
 
         //WEIGHT
         Text weightTitle = new Text("Weight: ");
         weightTitle.setFont(textFont);
         TextField weight = new TextField();
-        weight.setPromptText("83");
+        weight.setPromptText("185");
         weight.setFont(textFont);
-        ComboBox weightComboBox = new ComboBox();
-        weightComboBox.getItems().addAll("kg", "lbs");
-        weightComboBox.setValue("lbs");
-      //  int userWeight = Integer.parseInt(weight.getText());
+        RadioButton weightRbLbs = new RadioButton("lbs");
+        weightRbLbs.setSelected(true);
+        RadioButton weightRbKg = new RadioButton("kg");
+
+        ToggleGroup weightToggleGroup = new ToggleGroup();
+        weightRbLbs.setToggleGroup(weightToggleGroup);
+        weightRbKg.setToggleGroup(weightToggleGroup);
+
         //HBox for name
         HBox weightBox = new HBox();
         weightBox.setAlignment(Pos.CENTER);
-        weightBox.getChildren().addAll(weightTitle,weight,weightComboBox);
+        weightBox.getChildren().addAll(weightTitle,weight,weightRbLbs,weightRbKg);
 
         //GOAL WEIGHT
         Text goalWeightTitle = new Text("Goal Weight: ");
         goalWeightTitle.setFont(textFont);
         TextField goalWeight = new TextField();
-        goalWeight.setPromptText("102");
+        goalWeight.setPromptText("215");
         goalWeight.setFont(textFont);
-        ComboBox gWeightComboBox = new ComboBox();
-        gWeightComboBox.getItems().addAll("kg", "lbs");
-        gWeightComboBox.setValue("lbs");
-        // String userGoal = goalWeight.getText();
+        RadioButton goalWeightLBS = new RadioButton("lbs");
+        goalWeightLBS.setSelected(true);
+        RadioButton goalWeightKG = new RadioButton("kg");
 
         //HBox for name
         HBox goalWeightBox = new HBox();
         goalWeightBox.setAlignment(Pos.CENTER);
-        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,gWeightComboBox);
+        goalWeightBox.getChildren().addAll(goalWeightTitle,goalWeight,goalWeightLBS,goalWeightKG);
 
         Text activityText = new Text("Activity Level: ");
         activityText.setFont(textFont);
@@ -161,16 +168,18 @@ public class SignupPane extends BorderPane {
 
             try {
                 PrintWriter measurementFile = new PrintWriter("measurements.txt");
-                measurementFile.println(weightComboBox.getValue());
-                measurementFile.println(heightMeasurementBox.getValue());
+                measurementFile.println(((RadioButton) weightToggleGroup.getSelectedToggle()).getText());
+                measurementFile.println(((RadioButton) heightToggleGroup.getSelectedToggle()).getText());
                 measurementFile.close();
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-           ;
+
             MainApplication.mainStage.setScene(new FormScene());
 
         });
+
+        signupButton.getStyleClass().add("add-button");
 
         //VBox for info
         VBox signUpBox = new VBox();

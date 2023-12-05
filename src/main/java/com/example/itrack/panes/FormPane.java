@@ -69,20 +69,10 @@ public class FormPane extends BorderPane {
 
     public FormPane()  {
 
-
-
         /**
          * Records persons info into file
          * If user has already signed into the computer it will automatically go to the tracker page and display their info
          */
-       File file = new File("person_info.txt");
-
-
-        //Fonts
-        Font textFont = Font.font("Trebuchet MS", 14);
-        Font titleFont = Font.font("Trebuchet MS", 18);
-        Font errorFont = new Font("Times New Roman", 12);
-
 
         // Create a GridPane for food tracking
         GridPane gridPane = createGridPane();
@@ -153,7 +143,6 @@ public class FormPane extends BorderPane {
             lbsToKg();
         }
 
-        //   System.out.println("height in cm: " + personHeight);
 
         bmiCalculator = personWeight / ((personHeight / 100.0) * (personHeight / 100.0));
          String fitLevel = "";
@@ -194,7 +183,6 @@ public class FormPane extends BorderPane {
         Text calIntake = createStyledText("Calories Needed: " + totalCals);
 
 
-        Button deleteButton = new Button("DELETE");
 
         Button updateButton = new Button("UPDATE");
         updateButton.setOnAction(e->{
@@ -206,26 +194,11 @@ public class FormPane extends BorderPane {
 
             VBox vbox = new VBox();
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText, calIntake, bmiLabel,updateButton, deleteButton);
+            vbox.getChildren().addAll(nameLabel,ageLabel,genderLabel,heightLabel,weightLabel,goalWeightLabel, activityText, calIntake, bmiLabel,updateButton);
             personPane.setCenter(vbox);
             personTab.setContent(personPane);
             personTab.setClosable(false);
 
-        deleteButton.setOnAction(e->{
-            if(file.length() == 0){
-                error = new Text("THERE IS NO INFO TO DELETE");
-                vbox.getChildren().add(error);
-            }else{
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("person_info.txt"));
-                    writer.write("");
-                    writer.close();
-                    MainApplication.mainStage.setScene(new SignupScene());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
 
         // Create a TabPane
         tabPane.getTabs().addAll(personTab, addItemTab,mealsTab);
@@ -360,7 +333,6 @@ public class FormPane extends BorderPane {
 
             try {
                 personHeight = Double.parseDouble(info[3]);
-                System.out.println(personHeight);
             } catch (NumberFormatException e) {
                 // Handle the case where height is not a valid double
                 System.out.println("Error: Invalid height format in person_info.txt");
@@ -370,7 +342,6 @@ public class FormPane extends BorderPane {
             // Convert weight to an integer value
             try {
                 personWeight = Integer.parseInt(info[4]);
-                System.out.println(personWeight);
             } catch (NumberFormatException e) {
                 // Handle the case where weight is not a valid integer
                 System.out.println("Error: Invalid weight format in person_info.txt");
@@ -410,7 +381,6 @@ public class FormPane extends BorderPane {
         int feetOnly = (int) personHeight;
         //takes just the inches
         double inchesPart = (personHeight - feetOnly) * 100;
-        //  System.out.println("IN: " + inchesPart);
         double heightCm = feetOnly * 30.48;
         heightCm += inchesPart * 2.54;
         personHeight = heightCm;
@@ -504,19 +474,11 @@ private GridPane createMealsGrid() {
 
         // Create a cell factory for the action column
         actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
             private final Button deleteButton = new Button("Delete");
 
             {
                 // Set actions for the buttons
-                updateButton.setOnAction(event -> {
-                    MealItem mealItem = getTableView().getItems().get(getIndex());
-                    // Call a method to handle the update logic
-                    updateMealItem(mealItem);
 
-
-
-                });
 
                 deleteButton.setOnAction(event -> {
                     MealItem mealItem = getTableView().getItems().get(getIndex());
@@ -535,7 +497,7 @@ private GridPane createMealsGrid() {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    HBox buttons = new HBox(updateButton, deleteButton);
+                    HBox buttons = new HBox(deleteButton);
                     buttons.setSpacing(5);
                     setGraphic(buttons);
                 }
@@ -759,13 +721,13 @@ private GridPane createMealsGrid() {
      }
 
      private int recProteinAmount(){
-         return (int) ((0.3 * calCalc.getTdee())/4);
+         return (int) ((0.25 * calCalc.getTdee()) / 4);
      }
      private int recCarbAmount() {
          return (int) ((0.50 * calCalc.getTdee()) / 4);
      }
      private int recFatAmount(){
-            return (int) ((0.20 * calCalc.getTdee()) / 9);
+            return (int) ((0.30 * calCalc.getTdee()) / 9);
          }
      }
 

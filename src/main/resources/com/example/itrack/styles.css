@@ -3,7 +3,18 @@
     -fx-text-fill: #333; /* Dark gray text color */
 }
 
+
 .add-button {
+
+.text-field {
+    -fx-border-color: #45a049; /* Dark green border */
+    -fx-text-fill: darkGreen; /* White text color */
+    -fx-font-size: 14px; /* Font size */
+    -fx-font-family: "Arial"; /* Font family */
+}
+
+.add-button{
+>>>>>>> development
     -fx-background-color: #4CAF50; /* Green background */
     -fx-border-color: #45a049; /* Dark green border */
     -fx-text-fill: white; /* White text color */
