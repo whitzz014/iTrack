@@ -57,7 +57,7 @@ public class DBLoginPane extends BorderPane {
 
         setAlignment(logo, Pos.BOTTOM_CENTER);
 
-        VBox loginInput = new VBox();
+        VBox loginInput = new VBox(10);
         loginInput.setAlignment(Pos.CENTER); // Center the VBox
 
         // Set a common width for labels
@@ -94,6 +94,9 @@ public class DBLoginPane extends BorderPane {
 
 
         Button signin = new Button("Sign in");
+
+
+
         signin.setOnAction(e -> {
             try (PrintWriter pr = new PrintWriter(dbFile)) {
                 pr.println(host.getText());
@@ -132,9 +135,11 @@ public class DBLoginPane extends BorderPane {
 
         loginInput.getChildren().addAll(hostBox, userBox, passBox, nameBox, signin);
 
+
         setTop(logo);
         setCenter(loginInput);
         setAlignment(loginInput, Pos.CENTER); // Center the VBox within the BorderPane
+        getStyleClass().add("root");
     }
 
     private TextField createTextFieldWithMinWidth() {

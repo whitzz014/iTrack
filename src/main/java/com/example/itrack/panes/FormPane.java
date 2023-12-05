@@ -20,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.io.*;
@@ -118,13 +119,17 @@ public class FormPane extends BorderPane {
         Tab personTab = new Tab("Personal Info");
 
 
-        Text nameLabel = new Text("Name: " + info[0]);
-        Text ageLabel = new Text("Age: " + info[1]);
-        Text genderLabel = new Text("Gender: " + info[2]);
-        Text heightLabel = new Text("Height: " + info[3]);
-        Text weightLabel = new Text("Weight: " + info[4]);
-        Text goalWeightLabel = new Text("Goal Weight: " + info[5]);
-        Text activityText = new Text("Activity: " + info[6]);
+        Text nameLabel = createStyledText("Name: " + info[0]);
+        Text ageLabel = createStyledText("Age: " + info[1]);
+        Text genderLabel = createStyledText("Gender: " + info[2]);
+        Text heightLabel = createStyledText("Height: " + info[3]);
+        Text weightLabel = createStyledText("Weight: " + info[4]);
+        Text goalWeightLabel = createStyledText("Goal Weight: " + info[5]);
+        Text activityText = createStyledText("Activity: " + info[6]);
+
+// ...
+
+
 
 
         String[] measurements = readMeasurements();
@@ -176,7 +181,7 @@ public class FormPane extends BorderPane {
         //cal intake calc
 
         String totalCals = String.valueOf(calCalc.getTotalCal());
-        Text calIntake =new Text("Calories Needed: " + totalCals);
+        Text calIntake = createStyledText("Calories Needed: " + totalCals);
 
 
 
@@ -304,7 +309,12 @@ public class FormPane extends BorderPane {
      */
 
 
-
+    private Text createStyledText(String text) {
+        Text styledText = new Text(text);
+        styledText.setFont(Font.font("Helvetica", FontWeight.NORMAL, 20)); // Use Apple's preferred font
+        styledText.setFill(Color.BLACK); // Use Apple's preferred text color
+        return styledText;
+    }
 
 
 
