@@ -19,14 +19,16 @@ iTrack is a user-friendly calorie tracking app designed to help individuals achi
 
 ## Screenshots
 
-![Screenshot 1](screenshots/screenshot1.png)
-*Caption for Screenshot 1*
+![Screenshot 1](/src/main/resources/com/example/itrack/dbLogin.png)
 
-![Screenshot 2](screenshots/screenshot2.png)
-*Caption for Screenshot 2*
 
-![Screenshot 3](screenshots/screenshot3.png)
-*Caption for Screenshot 3*
+![Screenshot 2](/src/main/resources/com/example/itrack/signup.png)
+
+![Screenshot 3](/src/main/resources/com/example/itrack/account.png)
+
+![Screenshot 4](/src/main/resources/com/example/itrack/food.png)
+
+![Screenshot 5](/src/main/resources/com/example/itrack/Tracker.png)
 
 ## Installation
 
